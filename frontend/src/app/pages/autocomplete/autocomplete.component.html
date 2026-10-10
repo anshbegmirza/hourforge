@@ -1,0 +1,51 @@
+<ion-item lines="none" class="search-input" [class]="type">
+  <ion-input
+    class="auto-complete-input"
+    [formControl]="searchControl"
+    (ionFocus)="onFocus()"
+    (ionBlur)="onBlur()"
+    [clearInput]="true"
+  ></ion-input>
+</ion-item>
+
+@if (showDropdown) {
+  <div class="autocomplete-dropdown" [class]="type">
+    <ion-list>
+      @for (item of filteredItems; track item.id) {
+        <ion-item
+          button
+          (click)="selectItem(item)"
+          [class.selected]="selectedItem?.id === item.id"
+          class="list-item"
+          [lines]="$last ? 'none' : 'full'"
+        >
+          <ion-label>
+            <h3>{{ itemDisplayText[item.id] }}</h3>
+          </ion-label>
+        </ion-item>
+      }
+
+      @if (showAddOption) {
+        <ion-item
+          button
+          (click)="addNewEmployee()"
+          class="add-option list-item"
+          lines="none"
+        >
+          <ion-icon name="add-circle" slot="start" class="add-icon"></ion-icon>
+          <ion-label>
+            <h3>{{ addButtonText }}</h3>
+          </ion-label>
+        </ion-item>
+      }
+
+      @if (filteredItems.length === 0 && !showAddOption) {
+        <ion-item lines="none" class="list-item">
+          <ion-label>
+            <p class="not_found_text">{{ (type==='customer' ? 'NO_CUSTOMER_FOUND' : 'NO_EMPLOYEE_FOUND') | translate }}</p>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  </div>
+}

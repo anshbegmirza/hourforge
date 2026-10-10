@@ -1,0 +1,404 @@
+.header {
+  box-shadow: none;
+  --ion-background-color: #e2e2e2;
+  --color: #747474;
+}
+
+.settings-icon { font-size: 20px; }
+
+ion-content.page-wrapper {
+  --padding-top: 24px;
+  --padding-bottom: 24px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.search-container {
+  flex: 1;
+  height: 36px;
+  border-radius: 20px;
+  border: 1px solid #747474;
+  display: flex;
+  align-items: center;
+
+  ::ng-deep {
+    --box-shadow: none;
+    --color: #333;
+    --icon-color: #666;
+    --padding: 0;
+    font-size: 14px;
+    width: 100%;
+  }
+}
+
+.add-icon { font-size: 36px; }
+.delete-icon { font-size: 20px; }
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .date-field { flex: 3; }
+  .hourly-rate-field { flex: 2; }
+}
+
+.invoice-number {
+  margin-bottom: 20px;
+}
+
+.total-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --padding-top: 2px;
+  --padding-bottom: 2px;
+  --border-radius: 20px;
+  text-transform: none;
+
+  &::part(native) {
+    font-size: 12px;
+    --padding-inline-end: 0;
+    --padding-inline-start: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+}
+
+.export-icon { margin-right: 8px; margin-bottom: 2px; }
+
+.employee-table {
+  display: grid;
+  grid-template-columns:repeat(2,2fr) repeat(4, 1fr) auto;
+  gap: 8px 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.grid-header {
+  display: contents;
+  font-weight: 600;
+  text-align: left;
+  border: 1px solid #747474;
+  padding-bottom: 4px;
+  font-size: 12px;
+
+  > div { padding: 8px 4px; }
+}
+
+.grid-row {
+  display: contents;
+
+  ion-input::part(native),
+  ion-datetime::part(native),
+  ion-datetime-button::part(native),
+  ion-button::part(native) {
+    font-size: 14px !important;
+    border-radius: 20px;
+  }
+
+  input {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 20px;
+    border: 1px solid #747474;
+    background-color: transparent;
+    font-size: 14px;
+    text-align: center;
+    outline: none;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .surchargeNote {
+    grid-column: 1 / -1;
+    margin-top: 0;
+    font-size: 12px;
+    color: var(--ion-color-dark);
+  }
+}
+
+.auto-complete-employee { border: 1px solid #747474; border-radius: 20px; }
+
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.page-wrapper .sub-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.no-background {
+  border-radius: 20px;
+  margin-top: 10px;
+  border: 1px solid #747474;
+  height: 34px;
+
+  &ion-item::part(native) {
+    background-color: transparent !important;
+  }
+}
+
+.comment-section {
+  .sub-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  ion-item {
+    --border-radius: 20px;
+    --border-color: #747474;
+    --border-width: 1px;
+    --border-style: solid;
+
+    &::part(native) {
+      --background: transparent;
+      background-color: transparent;
+    }
+  }
+
+  .sc-ion-textarea-md-h { --padding-top: 14px; }
+}
+
+.footer {
+  position: relative;
+
+  .submit-btn {
+    --border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 12px;
+    min-width: 200px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --padding-inline-top: 0 !important;
+    --padding-inline-bottom: 0 !important;
+    text-transform: none;
+    cursor: pointer !important;
+  }
+}
+
+:host ::ng-deep {
+  .no-background ion-input .native-input { font-size: 14px !important; }
+  .no-background ion-input .item-native { --min-height: auto !important; }
+  .no-background::part(native) {
+    height: 30px !important;
+    --min-height: auto !important;
+    min-height: 30px;
+    background-color: transparent;
+  }
+}
+
+.form-field-1 .calendar .calendar-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.invalid-input {
+  border-color: #ff0000 !important;
+  --border-color: #ff0000 !important;
+  --highlight-color-focused: #ff0000 !important;
+}
+
+.calendar {
+  ion-datetime-button { width: 100%; }
+
+  ion-datetime-button::part(native) {
+    background: transparent;
+    flex-grow: 1;
+    text-align: left;
+    font-size: 14px;
+    padding: 0;
+  }
+}
+
+.dateBtn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #747474;
+  border-radius: 20px;
+  padding: 6px 12px;
+  gap: 2px;
+
+  .dateBtn-container-button::part(native) {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+.time-btn-text {
+  font-size: 14px;
+}
+
+
+.time-btn::part(native) {
+  flex-grow: 1;
+  margin: 0;
+  background: transparent;
+  border: 1px solid #747474;
+  font-size: 14px !important;
+  border-radius: 20px;
+}
+
+.delete-btn { margin: 0; min-height: auto; min-width: auto; }
+
+.actionables {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px 0 0;
+  margin-bottom: 10px;
+
+  ion-button.add-button {
+    margin: 0;
+    padding: 0;
+
+    &::part(native) {
+      --padding: 0 !important;
+      padding-inline-start: 0 !important;
+      padding-inline-end: 0 !important;
+    }
+  }
+
+  .total-time {
+    text-align: right;
+
+    p {
+      font-size: 12px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    span {
+      display: block;
+      font-size: 12px;
+      color: #000;
+      font-weight: 600;
+      border: 2px solid #000;
+      padding: 10px 14px;
+      background-color: #e2e2e2;
+      border-radius: 20px;
+    }
+  }
+}
+
+.type-toggle {
+  grid-template-columns: repeat(2, 1fr);
+  margin: 20px 0;
+
+  .toggle-button {
+    font-size: 14px;
+    text-transform: none;
+  }
+}
+
+.sign-section {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  .employees,
+  .employer {
+
+    .title,
+    .input-label {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    .input-label {
+      font-weight: 500;
+      display: block;
+    }
+
+    &-date {
+      margin-bottom: 20px;
+    }
+
+    .sign-btn {
+      display: block;
+      width: 100%;
+      background-color: transparent;
+    }
+
+    .sign-label-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sign-container {
+      height: 150px;
+      border: 1px solid #747474;
+      border-radius: 20px;
+      overflow: hidden;
+
+      &.has-img {
+        background-color: #ffffff;
+      }
+
+      .sign-img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+
+      }
+    }
+  }
+}
+
+.validation-text{
+  color: #ff2a2a;
+  font-size: 12px;
+}

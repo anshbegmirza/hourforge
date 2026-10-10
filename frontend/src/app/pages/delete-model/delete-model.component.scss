@@ -1,0 +1,101 @@
+ion-header.header {
+  box-shadow: none;
+  --padding: 0 !important;
+  padding: 0 !important;
+  padding-top: 12px;
+}
+
+.header{
+ion-toolbar {
+  --background: transparent;
+  box-shadow: none;
+}
+}
+
+.sub-header{
+  font-size: 14px;
+  font-weight: 600;
+}
+
+ion-content .page-wrapper {
+  --padding-top: 24px;
+  --padding-bottom: 24px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+}
+
+.modal-content {
+  ion-label.section-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .rounded-input {
+    --border-radius: 10px;
+    --padding-start: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    ion-input {
+      padding: 0 !important;
+    }
+  }
+
+  .action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+}
+
+.close-icon {
+  font-size: 28px;
+}
+
+.address-form {
+  .form-row {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    div:first-child {
+      flex: 2;
+    }
+
+    div:last-child {
+      flex: 1;
+    }
+
+    ion-item {
+      width: 100%;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.btn-primary {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --border-radius: 20px;
+  text-transform: none;
+}
+
+::ng-deep ion-modal.deleteModel::part(content){
+  height: 30% !important;
+  width: 80%;
+  border-radius: 20px;
+  max-height: 180px;
+}
+
+::ng-deep ion-modal.deleteModel::part(backdrop) {
+  opacity: 0.7;
+}

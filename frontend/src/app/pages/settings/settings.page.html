@@ -1,0 +1,207 @@
+<ion-header [translucent]="true" class="header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        default-href="/"
+        icon="chevron-back-outline"
+        text="Zurück"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"
+      >{{"APP_TITLE" | translate}}</ion-title
+    >
+    <div slot="end" class="header-end"></div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-wrapper">
+  <div class="container">
+    <h4 class="title">{{"SETTINGS"| translate}}</h4>
+
+    <div class="section-toolbar">
+      <h6>{{"LANGUAGE" | translate}}</h6>
+    </div>
+    <ion-list lines="none">
+      <ion-item class="rounded-item">
+        <ion-select
+          [(ngModel)]="selectedLang"
+          (ionChange)="onLanguageChange(selectedLang)"
+          interface="popover"
+        >
+          <ion-select-option value="en">English</ion-select-option>
+          <ion-select-option value="de">Deutsch</ion-select-option>
+          <ion-select-option value="fr">Français</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <div class="section-toolbar">
+      <h6>{{"EMPLOYEE"| translate}}</h6>
+      <ion-buttons class="actionables">
+        <ion-button
+          fill="clear"
+          (click)="openAddModel('employee')"
+          color="dark"
+          size="small"
+        >
+          <ion-icon
+            slot="icon-only"
+            class="icon-size"
+            name="add-outline"
+          ></ion-icon>
+        </ion-button>
+        <ion-button
+          [disabled]="!employees || employees.length === 0"
+          fill="clear"
+          (click)="openConfirmModel('employee', 'all')"
+          color="dark"
+          size="small"
+        >
+          <ion-icon
+            slot="icon-only"
+            class="icon-size"
+            name="trash-outline"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+
+    <ion-list lines="none">
+      @if (employees) { @for (employee of employees; track employee.id) {
+      <ion-item class="rounded-item">
+        <div class="item-content">{{ employee.name }}</div>
+        <ion-buttons slot="end" class="item-actions">
+          <ion-button
+            color="dark"
+            (click)="openAddModel('employee', employee)"
+            fill="clear"
+            size="small"
+          >
+            <ion-icon
+              slot="icon-only"
+              class="icon-size"
+              name="pencil-sharp"
+            ></ion-icon>
+          </ion-button>
+          <ion-button
+            color="dark"
+            (click)="openConfirmModel('employee', employee, employee?.name)"
+            fill="clear"
+            size="small"
+          >
+            <ion-icon
+              slot="icon-only"
+              class="icon-size"
+              name="trash-outline"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      } }
+    </ion-list>
+
+    <div class="section-toolbar">
+      <h6>{{"CUSTOMER" | translate}}</h6>
+      <ion-buttons class="actionables">
+        <ion-button
+          fill="clear"
+          (click)="openAddModel('customer')"
+          color="dark"
+          size="small"
+        >
+          <ion-icon
+            slot="icon-only"
+            class="icon-size"
+            name="add-outline"
+          ></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          [disabled]="!customers || customers.length === 0"
+          (click)="openConfirmModel('customer', 'all')"
+          color="dark"
+          size="small"
+        >
+          <ion-icon
+            slot="icon-only"
+            class="icon-size"
+            name="trash-outline"
+          ></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </div>
+
+    <ion-list lines="none">
+      @if (customers) { @for (customer of customers; track customer.companyName)
+      {
+      <ion-item class="rounded-item">
+        <div class="item-content">
+          <span>{{ customer.companyName }}</span>
+          <span>, {{ customer.street }} {{ customer.houseNumber }}</span>
+          <span>, {{ customer.postalCode }} {{ customer.city }}</span>
+        </div>
+        <ion-buttons slot="end" class="item-actions">
+          <ion-button
+            color="dark"
+            (click)="openAddModel('customer', customer)"
+            fill="clear"
+            size="small"
+          >
+            <ion-icon
+              slot="icon-only"
+              class="icon-size"
+              name="pencil-sharp"
+            ></ion-icon>
+          </ion-button>
+          <ion-button
+            color="dark"
+            (click)="openConfirmModel('customer', customer, customer?.companyName)"
+            fill="clear"
+            size="small"
+          >
+            <ion-icon
+              slot="icon-only"
+              class="icon-size"
+              name="trash-outline"
+            ></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      } }
+    </ion-list>
+
+    <div class="reset-container">
+      <ion-button
+        [disabled]="customers?.length===0 && employees?.length===0 && jobs?.length === 0"
+        color="dark"
+        shape="round"
+        (click)="openConfirmModel('reset', 'all')"
+        class="btn-primary"
+      >
+        App {{"LBL_RESET" | translate}}
+        <ion-icon
+          slot="icon-only"
+          class="icon-size reset-trash-icon"
+          name="trash-outline"
+        ></ion-icon>
+      </ion-button>
+      <ion-button
+        color="medium"
+        shape="round"
+        fill="outline"
+        (click)="logout()"
+        class="btn-primary"
+      >
+        {{"AUTH_LOGOUT" | translate}}
+        <ion-icon slot="end" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-item>
+    <span class="version">Version {{ environment.version }}</span>
+    <ion-button (click)="reload()" slot="end" fill="outline">
+      <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-footer>

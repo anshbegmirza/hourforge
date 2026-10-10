@@ -1,0 +1,133 @@
+.header {
+  box-shadow: none;
+  --ion-background-color: #e2e2e2;
+}
+
+.header-end {
+  height: 48px;
+  width: 48px;
+  margin-right: 4px;
+}
+
+ion-content.page-wrapper {
+  --padding-top: 24px;
+  --padding-bottom: 24px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.section-toolbar {
+  --background: transparent;
+  --border-color: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  box-shadow: none;
+  margin-right: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0 0;
+
+  h6 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+
+ion-list {
+  background: transparent !important;
+}
+
+.rounded-item {
+  --ion-item-background: transparent;
+  --min-height: max-content;
+  --padding-start: 25px;
+  --padding-end: 0px;
+  border-radius: 12px;
+  border: 2px solid #e2e2e2;
+  padding: 20px 0;
+  margin-bottom: 18px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item-content {
+  flex: 1;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  & span{
+    display: inline;
+  }
+}
+
+.item-actions {
+  --ion-buttons-margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  gap: 2px;
+
+  ion-button {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+    --margin-start: 0;
+    --margin-end: 0;
+    --margin-top: 0;
+    --margin-bottom: 0;
+    margin: 0;
+  }
+}
+
+.actionables,
+.item-actions {
+  ion-button {
+    --height: 32px;
+    --width: 32px;
+    --border-radius: 6px;
+  }
+}
+
+.icon-size{
+  font-size: 20px !important;
+}
+
+.reset {
+  &-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  &-trash-icon {
+    font-size: 16px;
+    margin-right: 8px;
+  }
+}
+
+.btn-primary {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  --border-radius: 20px;
+  text-transform: none;
+  font-size: 10px;
+}
+
+
+.version {
+  font-size: 0.8rem;
+}

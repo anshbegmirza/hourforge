@@ -1,0 +1,43 @@
+<ion-header class="ion-padding header">
+  <ion-toolbar class="header-toolbar">
+    <ion-title class="title">
+      {{ type | translate }}
+      {{ 'SIGNATURE' | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="clear">
+        <ion-icon name="close-outline" class="close-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding page-wrapper modal-content">
+  <canvas
+    #signatureCanvas
+    class="sign-canvas"
+  ></canvas>
+
+  <div class="action-buttons">
+    <ion-button
+      (click)="removeSign()"
+      expand="block"
+      class="btn-primary"
+      fill="clear"
+      color="danger"
+      slot="start"
+    >
+       {{"CLEAR" | translate }}
+    </ion-button>
+    <ion-button
+      expand="block"
+      slot="end"
+      color="primary"
+      class="btn-primary"
+      (click)="sendData()"
+      [disabled]="isCleared"
+    >
+      {{ 'SAVE' | translate }}
+    </ion-button>
+  </div>
+</ion-content>

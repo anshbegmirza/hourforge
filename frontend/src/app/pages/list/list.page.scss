@@ -1,0 +1,135 @@
+.add-icon {
+  font-size: 36px;
+}
+
+.settings-icon {
+  font-size: 18px;
+}
+
+.header-start {
+  height: 48px;
+  width: 48px;
+  margin-left: 4px;
+}
+
+.title {
+  margin-bottom: 26px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+::ng-deep .search-container {
+  flex: 1;
+  height: 36px;
+  border-radius: 1rem;
+  border: 1px solid #747474;
+  display: flex;
+  align-items: center;
+
+  ion-searchbar {
+    --box-shadow: none;
+    --color: #333;
+    --icon-color: #666;
+    --padding: 0px;
+
+    height: 36px;
+    font-size: 14px;
+    border-radius: 1rem;
+    width: 100%;
+
+    .searchbar-input.sc-ion-searchbar-md {
+      padding: 6px 28px;
+    }
+
+    .searchbar-search-icon.sc-ion-searchbar-md {
+      inset-inline-start: 0;
+    }
+  }
+}
+
+.header {
+  box-shadow: none;
+  --ion-background-color: #e2e2e2;
+  --color: #747474;
+}
+
+.right-icon {
+  background-color: transparent !important;
+  font-size: 2rem;
+}
+
+.custom-container {
+  border-radius: 16px;
+  overflow: hidden;
+
+  .export-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+
+  ion-item {
+    --border-color: transparent;
+    --background: transparent;
+  }
+
+  ion-item::part(detail-icon) {
+    font-size: 28px;
+  }
+}
+
+.sub {
+  &-title {
+    font-size: 14px;
+    font-weight: 600;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  &-header {
+    h2 {
+      font-size: 12px;
+      font-weight: 600;
+    }
+    p{
+      font-weight: 400;
+      font-size:12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 90%;
+    }
+  }
+}
+
+ion-content.page-wrapper {
+  --padding-top: 24px;
+  --padding-bottom: 24px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+}
+
+.btn-primary {
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  --border-radius: 20px;
+  text-transform: none;
+}
+
+.custom-btn {
+  --background: transparent;
+  --background-activated: transparent;
+  --background-focused: transparent;
+  --background-hover: transparent;
+  --ripple-color: transparent;
+}
+
+

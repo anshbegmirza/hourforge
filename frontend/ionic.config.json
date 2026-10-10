@@ -1,0 +1,7 @@
+{
+  "name": "Hourforge",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

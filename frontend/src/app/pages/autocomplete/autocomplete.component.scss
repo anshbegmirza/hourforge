@@ -1,0 +1,57 @@
+:host {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+.search-input.employee{
+  --padding-top: 0;
+  --padding-start:8px;
+  --inner-padding-end: 8px;
+  .auto-complete-input{
+    min-height: auto;
+    font-size: 14px;
+    padding-left: 8px !important;
+    ::ng-deep .input-clear-icon sc-ion-input-md{
+      height: 28px !important;
+    }
+  }
+}
+.auto-complete-input::part(clear-button) {
+    height: 28px !important;
+    width: 28px !important;
+    font-size: 14px !important;
+}
+.employee::part(native){
+    min-height: auto !important;
+    --min-height: auto !important;
+    height: 30px;
+  }
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: 140px;
+  overflow-y: auto;
+  background: var(--ion-background-color, #fff);
+  border: 1px solid var(--ion-color-medium, #ccc);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.employee .list-item::part(native) {
+  padding-left: 10px;
+  --inner-padding-end: 10px
+}
+ion-item {
+  .selected {
+    --background: var(--ion-color-light, #F5F5F5);
+  }
+  .add-option {
+    border-top: 1px solid var(--ion-color-light, #F5F5F5);
+  }
+  ::ng-deep .add-icon {
+    margin-right: 8px !important;
+  }
+  --background: transparent;
+}

@@ -1,0 +1,20 @@
+<ion-header class="ion-padding header">
+  <ion-toolbar>
+    <ion-title class="sub-header">{{"DELETE_WARNING" | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="clear">
+        <ion-icon name="close-outline" class="close-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding page-wrapper modal-content">
+  <ion-label class="section-label">{{ msgToShow }}</ion-label>
+
+  <div class="action-buttons">
+    <ion-button color="primary" (click)="confirmDelete()" class="btn-primary">
+      {{'LBL_YES' | translate}}
+    </ion-button>
+  </div>
+</ion-content>

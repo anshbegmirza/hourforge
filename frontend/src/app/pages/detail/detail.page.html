@@ -1,0 +1,467 @@
+<ion-header [translucent]="true" class="header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        default-href="/"
+        icon="chevron-back-outline"
+        text="Zurück"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center"
+      >{{"APP_TITLE" | translate}}</ion-title
+    >
+    <ion-buttons slot="end">
+      <ion-button
+        [routerLink]="'/settings'"
+        shape="round"
+        size="small"
+        class="settings-icon"
+      >
+        <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-wrapper">
+  @if (jobForm) {
+  <div class="d-flex">
+    <h2 color="dark">{{"ORDER_DETAILS"|translate}}</h2>
+    <div class="d-flex">
+      @if(isEditMode){
+      <ion-button
+        (click)="openWarningModel('job')"
+        expand="block"
+        class="btn-primary"
+        fill="clear"
+        color="danger"
+        shape="round"
+      >
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      }
+      <ion-button
+        fill="outline"
+        shape="round"
+        class="btn-primary"
+        color="dark"
+        [disabled]="jobForm.invalid"
+        (click)="openExportModal()"
+      >
+        <ion-icon
+          slot="start"
+          name="open-outline"
+          class="export-icon"
+        ></ion-icon>
+        {{ (recordType === "performance" ? 'LBL_EXPORT_PERFORMANCE' : 'LBL_EXPORT_TIMESHEET') | translate }}
+      </ion-button>
+    </div>
+  </div>
+
+  <ion-segment class="type-toggle" color="dark" justify="start" [(ngModel)]="recordType">
+    <ion-segment-button class="toggle-button" value="timesheet">
+      {{ 'TIMESHEET' | translate}}
+    </ion-segment-button>
+    <ion-segment-button class="toggle-button" value="performance">
+      {{ 'PERFORMANCE' | translate}}
+    </ion-segment-button>
+  </ion-segment>
+
+  <form [formGroup]="jobForm">
+    <ion-label position="stacked" class="sub-title"
+      >{{"CUSTOMER" | translate}}</ion-label
+    >
+    <div class="search-wrapper">
+      <div
+        class="search-container"
+        [class.invalid-input]="jobForm.controls['customer'].touched && jobForm.controls['customer'].invalid"
+      >
+        <app-autocomplete
+          type="customer"
+          formControlName="customer"
+        ></app-autocomplete>
+      </div>
+      <ion-button
+        fill="clear"
+        shape="round"
+        color="dark"
+        (click)="openAddModel()"
+      >
+        <ion-icon
+          slot="icon-only"
+          name="add-circle"
+          class="add-icon"
+        ></ion-icon>
+      </ion-button>
+    </div>
+
+    @if(recordType === 'timesheet'){
+      <div class="form-row">
+          <div class="date-field">
+            <ion-label position="stacked" class="sub-title"
+              >Nachtschichtzeit
+            </ion-label>
+
+              <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('nightShiftTime')">
+                <ng-template>
+                  <ion-datetime
+                    id="nightShiftTime"
+                    presentation="time"
+                    formControlName="nightShiftTime"
+                    locale="de-DE"
+                    [showDefaultButtons]="true"
+                    [doneText]="'DONE' | translate"
+                    [cancelText]="'CANCEL' | translate"
+                  ></ion-datetime>
+                </ng-template>
+              </ion-modal>
+
+              <ion-datetime-button class="time-btn" datetime="nightShiftTime">
+              </ion-datetime-button>
+          </div>
+
+          <div class="hourly-rate-field">
+            <ion-label position="stacked" class="sub-title"
+              >{{"HOURLY_RATE" |translate}}</ion-label
+            >
+            <ion-item
+              lines="none"
+              class="no-background"
+              [class.invalid-input]="jobForm.controls['hourlyRate'].touched && jobForm.controls['hourlyRate'].invalid"
+            >
+              <ion-input formControlName="hourlyRate" type="number" inputmode="numeric" min="0" (ionInput)="onHourlyRateInput($event)"></ion-input>
+            </ion-item>
+            @if (
+              jobForm.controls['hourlyRate'].touched &&
+              jobForm.controls['hourlyRate'].invalid
+            ) {
+              <span class="validation-text"
+                >*{{ 'HOURLY_RATE_VALIDATION' | translate }}</span
+              >
+            }
+          </div>
+      </div>
+    }
+    
+    @if(recordType === 'performance') {
+      <div class="invoice-number">
+        <ion-label position="stacked" class="sub-title"
+          >{{ "INVOICE_NUMBER" | translate }}</ion-label
+        >
+        <ion-item
+          lines="none"
+          class="no-background"
+          [class.invalid-input]="jobForm.controls['invoiceNumber'].touched && jobForm.controls['invoiceNumber'].invalid"
+        >
+          <ion-input formControlName="invoiceNumber" type="number" inputmode="numeric" min="0"></ion-input>
+        </ion-item>
+        @if (
+          jobForm.controls['invoiceNumber'].touched &&
+          jobForm.controls['invoiceNumber'].invalid
+        ) {
+          <span class="validation-text"
+            >*{{ 'INVOICE_NUMBER_VALIDATION' | translate }}</span
+          >
+        }
+      </div>
+    }
+    
+    <div class="employee-table" formArrayName="entries">
+      <div class="grid-header">
+        <div>{{"EMPLOYEE" | translate}}</div>
+        <div>{{"DATE" | translate}}</div>
+        <div>{{"START_TIME" | translate}}</div>
+        <div>{{"END_TIME" | translate}}</div>
+        <div>{{"PAUSE" | translate}}</div>
+        <div>{{"DURATION" | translate}}</div>
+        <div></div>
+      </div>
+
+      @for (entry of entries.controls; track $index; let i = $index) {
+      <div class="grid-row" [formGroupName]="i">
+        <div
+          class="auto-complete-employee"
+          [class.invalid-input]="entry?.get('employee')?.touched && entry?.get('employee')?.invalid"
+        >
+          <app-autocomplete
+            type="employee"
+            formControlName="employee"
+          ></app-autocomplete>
+        </div>
+        <div class="form-field-1">
+          <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('date', entry)">
+            <ng-template>
+              <ion-datetime
+                id="date{{ i }}"
+                presentation="date"
+                formControlName="date"
+                locale="de-DE"
+                [showDefaultButtons]="true"
+                [doneText]="'DONE' | translate"
+                [cancelText]="'CANCEL' | translate"
+                [firstDayOfWeek]="1"
+                [formatOptions]="{ date: { day: '2-digit', month: 'short', year: 'numeric' } }"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+
+          <ion-datetime-button
+            class="time-btn"
+            datetime="date{{ i }}"
+          ></ion-datetime-button>
+        </div>
+        <div>
+          <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('start',entry)">
+            <ng-template>
+              <ion-datetime
+                id="start{{ i }}"
+                presentation="time"
+                formControlName="start"
+                locale="de-DE"
+                [showDefaultButtons]="true"
+                [doneText]="'DONE' | translate"
+                [cancelText]="'CANCEL' | translate"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+          <ion-datetime-button class="time-btn" datetime="start{{ i }}">
+          </ion-datetime-button>
+        </div>
+        <div>
+          <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('end',entry)">
+            <ng-template>
+              <ion-datetime
+                id="end{{ i }}"
+                presentation="time"
+                formControlName="end"
+                locale="de-DE"
+                [showDefaultButtons]="true"
+                [doneText]="'DONE' | translate"
+                [cancelText]="'CANCEL' | translate"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+          <ion-datetime-button
+            class="time-btn"
+            datetime="end{{ i }}"
+          ></ion-datetime-button>
+        </div>
+        <div>
+          <div class="total-time dateBtn-container">
+            <ion-datetime-button
+              class="dateBtn-container-button"
+              datetime="pause{{ i }}"
+            ></ion-datetime-button>
+            <span class="time-btn-text">Std.</span>
+          </div>
+          <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('pause',entry)">
+            <ng-template>
+              <ion-datetime
+                id="pause{{ i }}"
+                presentation="time"
+                formControlName="pause"
+                [showDefaultButtons]="true"
+                [doneText]="'DONE' | translate"
+                [cancelText]="'CANCEL' | translate"
+                locale="de-DE"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </div>
+        <div>
+          <input type="text" formControlName="duration" readonly />
+        </div>
+        <div>
+          <ion-button
+            fill="clear"
+            color="dark"
+            shape="round"
+            [disabled]="entries.controls.length <= 1"
+            (click)="removeEmployee($index)"
+            class="delete-btn"
+          >
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+        @if (entry.value.surchargeNote) {
+        <p class="surchargeNote">{{ entry.value.surchargeNote }}</p>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="actionables">
+      <ion-button
+        class="add-button"
+        (click)="addEmployee()"
+        expand="block"
+        size="small"
+        fill="clear"
+        color="dark"
+        shape="round"
+      >
+        <ion-icon name="add-circle" class="add-icon"></ion-icon>
+      </ion-button>
+      <div class="total-time">
+        <p class="sub-title">{{"TOTAL_TIME"|translate}}</p>
+        <span>{{ jobForm.value?.totalTime }} Std.</span>
+      </div>
+    </div>
+
+    <div class="comment-section">
+      <ion-label class="sub-title">{{ "COMMENT"| translate }}</ion-label>
+      <ion-item lines="none">
+        <ion-textarea
+          formControlName="comment"
+          rows="1"
+          [autoGrow]="true"
+        ></ion-textarea>
+      </ion-item>
+    </div>
+
+    @if (recordType === 'performance') {
+      <div class="sign-section">
+        <div class="employees">
+          <p class="title">
+            {{ 'EMPLOYEES' | translate}}
+          </p>
+          <div class="employees-date">
+            <ion-label class="input-label">
+              {{ "DATE" |translate }}
+            </ion-label>
+            <ion-item
+              lines="none"
+              class="calendar no-background"
+              [class.invalid-input]="jobForm.controls['employeeDate'].touched && jobForm.controls['employeeDate'].invalid"
+            >
+              <ion-icon
+                name="calendar-outline"
+                class="calendar-icon"
+                slot="start"
+              ></ion-icon>
+              <ion-datetime-button datetime="employeeDate"></ion-datetime-button>
+            </ion-item>
+            <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('employeeDate')">
+              <ng-template>
+                <ion-datetime
+                  id="employeeDate"
+                  presentation="date"
+                  locale="de-DE"
+                  [doneText]="'DONE' | translate"
+                  [cancelText]="'CANCEL' | translate"
+                  [formatOptions]="{date:{day: '2-digit' ,month: 'long', year: 'numeric'
+                  }}"
+                  formControlName="employeeDate"
+                  [showDefaultButtons]="true"
+                  [firstDayOfWeek]="1"
+                  [min]="minDate"
+                  [max]="maxDate"
+                ></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </div>
+          <div class="employees-sign">
+            <div class="sign-label-container">
+              <ion-label class="input-label">
+                {{ "SIGNATURE" |translate }}
+              </ion-label>
+              <ion-button
+                (click)="removeSign('EMPLOYEES')"
+                expand="block"
+                class="btn-primary"
+                fill="clear"
+                color="danger"
+                shape="round"
+                [disabled]="!jobForm.value?.employeeSignature"
+              >
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+            <div class="sign-container" [class.has-img]="jobForm.value?.employeeSignature" (click)="openSignModel('EMPLOYEES')">
+              @if (jobForm.value?.employeeSignature) {
+                <img class="sign-img" [src]="jobForm.value?.employeeSignature" alt="Signature">
+              }
+            </div>
+          </div>
+        </div>
+        <div class="employer">
+          <p class="title">
+            {{ 'EMPLOYER' | translate}}
+          </p>
+          <div class="employer-date">
+            <ion-label class="input-label">
+              {{ "DATE" |translate }}
+            </ion-label>
+            <ion-item
+              lines="none"
+              class="calendar no-background"
+              [class.invalid-input]="jobForm.controls['employerDate'].touched && jobForm.controls['employerDate'].invalid"
+            >
+              <ion-icon
+                name="calendar-outline"
+                class="calendar-icon"
+                slot="start"
+              ></ion-icon>
+              <ion-datetime-button datetime="employerDate"> </ion-datetime-button>
+            </ion-item>
+            <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('employerDate')">
+              <ng-template>
+                <ion-datetime
+                  id="employerDate"
+                  presentation="date"
+                  locale="de-DE"
+                  [doneText]="'DONE' | translate"
+                  [cancelText]="'CANCEL' | translate"
+                  [formatOptions]="{date:{day: '2-digit' ,month: 'long', year: 'numeric'
+                  }}"
+                  formControlName="employerDate"
+                  [showDefaultButtons]="true"
+                  [firstDayOfWeek]="1"
+                  [min]="minDate"
+                  [max]="maxDate"
+                ></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </div>
+          <div class="employer-sign">
+            <div class="sign-label-container">
+              <ion-label class="input-label">
+                {{ "SIGNATURE" |translate }}
+              </ion-label>
+              <ion-button
+                (click)="removeSign('EMPLOYER')"
+                expand="block"
+                class="btn-primary"
+                fill="clear"
+                color="danger"
+                shape="round"
+                [disabled]="!jobForm.value?.employerSignature"
+              >
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+            <div class="sign-container" [class.has-img]="jobForm.value?.employerSignature" (click)="openSignModel('EMPLOYER')">
+              @if (jobForm.value?.employerSignature) {
+                <img class="sign-img" [src]="jobForm.value?.employerSignature" alt="Signature">
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </form>
+  }
+</ion-content>
+<ion-footer class="footer">
+  <ion-toolbar>
+    <ion-button
+      (click)="onSubmit()"
+      slot="end"
+      color="primary"
+      class="submit-btn"
+      [disabled]="!jobForm || jobForm.invalid"
+    >
+      {{"SAVE_ORDER" | translate}}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

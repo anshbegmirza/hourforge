@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Hourforge</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="auth-wrap">
+    <h2>
+      {{ (mode === 'login' ? 'AUTH_LOGIN' : 'AUTH_REGISTER') | translate }}
+    </h2>
+    <p class="hint">{{ 'AUTH_SUBTITLE' | translate }}</p>
+
+    <ion-list lines="full">
+      @if (mode === 'register') {
+        <ion-item>
+          <ion-input
+            [(ngModel)]="name"
+            label="{{ 'NAME' | translate }}"
+            labelPlacement="stacked"
+            type="text"
+            autocomplete="name"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="username"
+            label="{{ 'AUTH_USERNAME' | translate }}"
+            labelPlacement="stacked"
+            type="text"
+            autocomplete="username"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            [(ngModel)]="email"
+            label="{{ 'AUTH_EMAIL' | translate }}"
+            labelPlacement="stacked"
+            type="email"
+            autocomplete="email"
+          ></ion-input>
+        </ion-item>
+      } @else {
+        <ion-item>
+          <ion-input
+            [(ngModel)]="login"
+            label="{{ 'AUTH_LOGIN_ID' | translate }}"
+            labelPlacement="stacked"
+            type="text"
+            autocomplete="username"
+          ></ion-input>
+        </ion-item>
+      }
+      <ion-item>
+        <ion-input
+          [(ngModel)]="password"
+          label="{{ 'AUTH_PASSWORD' | translate }}"
+          labelPlacement="stacked"
+          type="password"
+          autocomplete="current-password"
+        ></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" [disabled]="busy" (click)="submit()">
+      {{ (mode === 'login' ? 'AUTH_LOGIN' : 'AUTH_REGISTER') | translate }}
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" (click)="switchMode()">
+      {{
+        (mode === 'login' ? 'AUTH_NEED_ACCOUNT' : 'AUTH_HAVE_ACCOUNT')
+          | translate
+      }}
+    </ion-button>
+  </div>
+</ion-content>

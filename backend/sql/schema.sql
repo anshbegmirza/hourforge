@@ -1,0 +1,91 @@
+CREATE DATABASE IF NOT EXISTS hourforge
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE hourforge;
+
+CREATE TABLE users (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL,
+  username VARCHAR(64) NULL,
+  password_hash VARCHAR(255) NULL,
+  name VARCHAR(255) NOT NULL,
+  google_id VARCHAR(255) NULL,
+  preferred_lang VARCHAR(5) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_email (email),
+  UNIQUE KEY uq_users_username (username),
+  UNIQUE KEY uq_users_google_id (google_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE customers (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  company_name VARCHAR(255) NOT NULL,
+  street VARCHAR(255) NOT NULL DEFAULT '',
+  house_number VARCHAR(64) NOT NULL DEFAULT '',
+  postal_code INT NOT NULL DEFAULT 0,
+  city VARCHAR(255) NOT NULL DEFAULT '',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_customers_user (user_id),
+  CONSTRAINT fk_customers_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE employees (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_employees_user (user_id),
+  CONSTRAINT fk_employees_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE jobs (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  customer_id BIGINT UNSIGNED NULL,
+  job_number INT NOT NULL DEFAULT 1,
+  night_shift_time VARCHAR(32) NOT NULL DEFAULT '',
+  invoice_number INT NOT NULL DEFAULT 0,
+  hourly_rate DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  comment TEXT NULL,
+  total_time VARCHAR(32) NOT NULL DEFAULT '',
+  employee_date VARCHAR(64) NOT NULL DEFAULT '',
+  employee_signature MEDIUMTEXT NULL,
+  employer_date VARCHAR(64) NOT NULL DEFAULT '',
+  employer_signature MEDIUMTEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_jobs_user (user_id),
+  KEY idx_jobs_customer (customer_id),
+  CONSTRAINT fk_jobs_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+  CONSTRAINT fk_jobs_customer FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE job_entries (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  job_id BIGINT UNSIGNED NOT NULL,
+  employee_id BIGINT UNSIGNED NULL,
+  entry_date VARCHAR(64) NOT NULL DEFAULT '',
+  start_time VARCHAR(32) NOT NULL DEFAULT '',
+  end_time VARCHAR(32) NOT NULL DEFAULT '',
+  pause VARCHAR(32) NOT NULL DEFAULT '',
+  duration VARCHAR(32) NOT NULL DEFAULT '',
+  work_hours DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  night_hours DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  surcharge_note VARCHAR(512) NOT NULL DEFAULT '',
+  sort_order INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  KEY idx_job_entries_job (job_id),
+  KEY idx_job_entries_employee (employee_id),
+  CONSTRAINT fk_job_entries_job FOREIGN KEY (job_id) REFERENCES jobs (id) ON DELETE CASCADE,
+  CONSTRAINT fk_job_entries_employee FOREIGN KEY (employee_id) REFERENCES employees (id) ON DELETE SET NULL
+) ENGINE=InnoDB;

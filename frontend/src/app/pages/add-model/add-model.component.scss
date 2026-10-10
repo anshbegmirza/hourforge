@@ -1,0 +1,136 @@
+ion-header.header{
+  box-shadow: none;
+  --padding: 0 !important;
+  padding: 0  !important;
+  padding-top: 12px;
+
+}
+
+ion-toolbar.header-toolbar {
+  --background: transparent;
+  box-shadow: none;
+}
+.title{
+  font-size: 16px;
+  font-weight: 700;
+}
+
+
+ion-content .page-wrapper {
+  --padding-top: 24px;
+  --padding-bottom: 24px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+}
+
+
+.modal-content {
+  ion-label.section-label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .rounded-input {
+    --border-radius: 20px;
+    --padding-start: 12px;
+    ion-input{
+      padding: 0 !important;
+    }
+  }
+  .action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+}
+
+.validation-text{
+  margin-top: 4px;
+  color: #ff2a2a;
+  font-size: 12px;
+}
+
+::ng-deep .truncate-input ion-input .native-input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.close-icon{
+  font-size: 28px;
+}
+
+.address-form {
+  display: grid;
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: start;
+    margin-top: 15px;
+    
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &.row-postal-city {
+      grid-template-columns: 2fr 3fr;
+    }
+  }
+
+  ion-item {
+    --background: transparent;
+    --border-radius: 1rem;
+  }
+}
+
+
+.btn-primary {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  --border-radius: 20px;
+  text-transform: none;
+}
+
+.rounded-input {
+  --border-radius: 8px;
+  --border-width: 1px;
+  --border-color: #747474;
+  --background: transparent;
+  background-color: transparent;
+  font-size: 14px !important;
+}
+
+.invalid-input {
+  border-color: #ff0000 !important;
+  --border-color: #ff0000 !important;
+  --highlight-color-focused: #ff0000 !important;
+}
+
+::ng-deep ion-modal.employee-modal::part(content) {
+  height: 32% !important;
+  width: 90%;
+  border-radius: 20px;
+  max-height: 220px;
+}
+
+::ng-deep ion-modal.addModal::part(content){
+  height: 90% !important;
+  width: 80%;
+  border-radius: 20px;
+  max-height: 420px;
+}
+
+::ng-deep ion-modal.addModal::part(backdrop) {
+  opacity: 0.7;
+}

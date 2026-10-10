@@ -1,0 +1,60 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <ion-title>{{ 'EXPORT_MODEL' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" fill="clear">
+        <ion-icon name="close-outline" class="close-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding page-wrapper modal-content">
+  <ion-item lines="none" class="export">
+    <ion-select
+      [(ngModel)]="exportFormat"
+      class="export-select"
+      [label]="'FORMAT' | translate"
+      interface="popover"
+      popover-class="export-popover"
+    >
+      <ion-select-option class="export-select-option" value="pdf"
+        >PDF</ion-select-option
+      >
+      <ion-select-option class="export-select-option" value="xlsx"
+        >XLSX</ion-select-option
+      >
+    </ion-select>
+  </ion-item>
+  @if (isListView) {
+    <ion-item lines="none" class="export">
+      <ion-select
+        [(ngModel)]="selectedEmployeeId"
+        class="export-select"
+        interface="popover"
+        [label]="'EMPLOYEE' | translate"
+        popover-class="export-popover"
+      >
+        @for (emp of employeesList; track emp.id) {
+          <ion-select-option [value]="emp.id" class="export-select-option">
+            {{ emp.name }}
+          </ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+  }
+</ion-content>
+
+<ion-footer class="footer">
+  <div class="action-buttons">
+    <ion-button
+      color="primary"
+      slot="icon-only"
+      (click)="confirmExport()"
+      class="btn-primary"
+      [disabled]="!selectedEmployeeId && isListView"
+    >
+      {{ 'EXPORT_MODEL' | translate }}
+    </ion-button>
+  </div>
+</ion-footer>
