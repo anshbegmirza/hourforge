@@ -6,10 +6,14 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
-  IonContent,
   IonLabel,
   IonItem,
   IonInput,
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonNote,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
@@ -31,10 +35,14 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrls: ['./add-model.component.scss'],
   standalone: true,
   imports: [
+    IonNote,
+    IonCol,
+    IonRow,
+    IonGrid,
+    IonContent,
     IonInput,
     IonItem,
     IonLabel,
-    IonContent,
     IonIcon,
     IonButton,
     IonButtons,

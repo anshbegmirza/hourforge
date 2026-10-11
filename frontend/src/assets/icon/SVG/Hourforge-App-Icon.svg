@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280">
-  <rect width="280" height="280" fill="#2563eb"/>
-  <!-- HF monogram: heavy bars + diagonal cut (matches preferred mark) -->
-  <path fill="#000" d="
-    M44 72h36v40l22 22v74H44V72zm58 0h36v38l-20 20v78h20V72zm50 0h92v32H178v22h54v32H178v50h-36V72z
-  "/>
-  <!-- blue wedge cut between H and F for the signature gap -->
-  <polygon fill="#2563eb" points="128,150 154,176 154,204 128,178"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" shape-rendering="geometricPrecision">
+  <rect width="280" height="280" fill="#41BAED"/>
+  <g fill="#ffffff">
+    <!-- H left stem -->
+    <rect x="36" y="52" width="42" height="176"/>
+    <!-- H right stem (top) -->
+    <polygon points="102,52 144,52 144,118 128,134 102,134"/>
+    <!-- H crossbar -->
+    <polygon points="78,118 128,118 144,134 144,160 78,160"/>
+    <!-- H right stem (bottom) -->
+    <polygon points="102,160 128,160 144,176 144,228 102,228"/>
+    <!-- F stem -->
+    <rect x="168" y="52" width="42" height="176"/>
+    <!-- F top bar -->
+    <rect x="168" y="52" width="76" height="40"/>
+    <!-- F mid bar -->
+    <polygon points="168,134 184,118 244,118 244,160 168,160"/>
+  </g>
 </svg>

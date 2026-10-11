@@ -6,6 +6,9 @@ import {
   OnInit,
   OnDestroy,
   inject,
+  HostListener,
+  ElementRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -60,6 +63,8 @@ export class AutocompleteComponent
   private customerService = inject(CustomerService);
   private employeeService = inject(EmployeeService);
   private utilsService = inject(UtilsService);
+  private host = inject(ElementRef<HTMLElement>);
+  private cdr = inject(ChangeDetectorRef);
 
   searchControl = new FormControl('');
   items: (Customer | Employee)[] = [];
@@ -69,9 +74,11 @@ export class AutocompleteComponent
   showAddOption = false;
   addButtonText = '';
   itemDisplayText: { [id: string]: string } = {};
+  dropdownStyle: Record<string, string> = {};
 
   private destroy$ = new Subject<void>();
-  private onChange = (value: any) => {};
+  private blurTimer: ReturnType<typeof setTimeout> | null = null;
+  private onChange = (_value: any) => {};
   private onTouched = () => {};
 
   ngOnInit() {
@@ -82,6 +89,19 @@ export class AutocompleteComponent
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.blurTimer) clearTimeout(this.blurTimer);
+  }
+
+  /** Native focus reaches here even when ionFocus does not. */
+  @HostListener('focusin')
+  onFocusIn() {
+    this.openDropdown();
+  }
+
+  @HostListener('window:resize')
+  @HostListener('window:scroll')
+  onViewportChange() {
+    if (this.showDropdown) this.positionDropdown();
   }
 
   private loadItems() {
@@ -111,38 +131,38 @@ export class AutocompleteComponent
 
   private setupAutocomplete() {
     this.searchControl.valueChanges
-      .pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(150), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
-        this.filterItems(searchTerm || '');
-        this.validateSelection(searchTerm || '');
-        this.updateAddOption(searchTerm || '');
+        const term = searchTerm || '';
+        this.validateSelection(term);
+        this.openDropdown(term);
+        this.updateAddOption(term);
       });
   }
 
+  private normalize(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
   private filterItems(searchTerm: string) {
-    if (!searchTerm.trim()) {
+    const term = this.normalize(searchTerm.trim());
+
+    if (
+      !term ||
+      (this.selectedItem &&
+        term === this.normalize(this.getItemDisplayText(this.selectedItem)))
+    ) {
       this.filteredItems = [...this.items];
       this.updateDisplayTexts();
       return;
     }
 
-    const term = searchTerm.toLowerCase();
-
-    if (this.type === 'customer') {
-      this.filteredItems = this.items.filter((item) => {
-        const customer = item as Customer;
-        return (
-          customer.companyName.toLowerCase().includes(term) ||
-          customer.street.toLowerCase().includes(term) ||
-          customer.city.toLowerCase().includes(term)
-        );
-      });
-    } else {
-      this.filteredItems = this.items.filter((item) => {
-        const employee = item as Employee;
-        return employee.name.toLowerCase().includes(term);
-      });
-    }
+    this.filteredItems = this.items.filter((item) =>
+      this.normalize(this.getItemDisplayText(item)).includes(term),
+    );
 
     this.updateDisplayTexts();
   }
@@ -153,7 +173,7 @@ export class AutocompleteComponent
     const expectedText = this.getItemDisplayText(this.selectedItem);
     if (searchTerm !== expectedText) {
       this.selectedItem = null;
-      this.onChange('');
+      this.onChange(null);
     }
   }
 
@@ -179,29 +199,69 @@ export class AutocompleteComponent
     if (this.type === 'customer') {
       const customer = item as Customer;
       return `${customer.companyName}, ${customer.street} ${customer.houseNumber}, ${customer.postalCode} ${customer.city}`;
-    } else {
-      const employee = item as Employee;
-      return employee.name;
     }
+    return (item as Employee).name;
+  }
+
+  openDropdown(searchTerm?: string) {
+    if (this.blurTimer) {
+      clearTimeout(this.blurTimer);
+      this.blurTimer = null;
+    }
+    this.showDropdown = true;
+    this.loadItems();
+    this.filterItems(searchTerm ?? this.searchControl.value ?? '');
+    requestAnimationFrame(() => this.positionDropdown());
+    this.cdr.detectChanges();
+  }
+
+  private positionDropdown() {
+    const anchor =
+      this.host.nativeElement.querySelector('ion-item.search-input') ||
+      this.host.nativeElement;
+    const rect = anchor.getBoundingClientRect();
+    this.dropdownStyle = {
+      position: 'fixed',
+      top: `${Math.round(rect.bottom + 4)}px`,
+      left: `${Math.round(rect.left)}px`,
+      width: `${Math.round(rect.width)}px`,
+      zIndex: '10000',
+    };
+    this.cdr.markForCheck();
   }
 
   onFocus() {
-    this.showDropdown = true;
-    this.loadItems();
+    this.openDropdown();
+  }
+
+  onIonInput(event: CustomEvent) {
+    const value = String((event as CustomEvent<{ value: string }>).detail?.value ?? '');
+    this.validateSelection(value);
+    this.openDropdown(value);
+    void this.updateAddOption(value);
   }
 
   onBlur() {
-    setTimeout(() => {
+    this.blurTimer = setTimeout(() => {
       this.showDropdown = false;
-    }, 150);
+      this.cdr.markForCheck();
+    }, 200);
     this.onTouched();
   }
 
+  /** mousedown fires before blur, so selection sticks */
   selectItem(item: Customer | Employee) {
+    if (this.blurTimer) {
+      clearTimeout(this.blurTimer);
+      this.blurTimer = null;
+    }
     this.selectedItem = item;
-    this.searchControl.setValue(this.getItemDisplayText(item));
+    this.searchControl.setValue(this.getItemDisplayText(item), {
+      emitEvent: false,
+    });
     this.showDropdown = false;
     this.onChange(item);
+    this.cdr.markForCheck();
   }
 
   async addNewEmployee() {
@@ -220,10 +280,12 @@ export class AutocompleteComponent
     if (value) {
       const item = this.items.find((i) => i.id === value.id) || value;
       this.selectedItem = item;
-      this.searchControl.setValue(this.getItemDisplayText(item));
+      this.searchControl.setValue(this.getItemDisplayText(item), {
+        emitEvent: false,
+      });
     } else {
       this.selectedItem = null;
-      this.searchControl.setValue('');
+      this.searchControl.setValue('', { emitEvent: false });
     }
   }
 
@@ -237,9 +299,9 @@ export class AutocompleteComponent
 
   setDisabledState(isDisabled: boolean): void {
     if (isDisabled) {
-      this.searchControl.disable();
+      this.searchControl.disable({ emitEvent: false });
     } else {
-      this.searchControl.enable();
+      this.searchControl.enable({ emitEvent: false });
     }
   }
 }

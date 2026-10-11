@@ -1,16 +1,14 @@
 .header {
   box-shadow: none;
-  --ion-background-color: #e2e2e2;
-  --color: #747474;
 }
 
 .settings-icon { font-size: 20px; }
 
 ion-content.page-wrapper {
-  --padding-top: 24px;
-  --padding-bottom: 24px;
-  --padding-start: 24px;
-  --padding-end: 24px;
+  --padding-top: 20px;
+  --padding-bottom: 28px;
+  --padding-start: 20px;
+  --padding-end: 20px;
 }
 
 .d-flex {
@@ -20,37 +18,54 @@ ion-content.page-wrapper {
 
   h2 {
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--hourforge-text);
   }
 }
 
 .search-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 5;
 }
 
 .search-container {
   flex: 1;
-  height: 36px;
-  border-radius: 20px;
-  border: 1px solid #747474;
-  display: flex;
-  align-items: center;
+  position: relative;
+  border: none;
+  background: transparent;
+
+  // Pill chrome on the input only — keep overflow visible so dropdown can show
+  ::ng-deep app-autocomplete > ion-item.search-input {
+    --background: var(--hourforge-glass-strong);
+    --border-radius: 999px;
+    --min-height: 44px;
+    --padding-start: 12px;
+    --inner-padding-end: 8px;
+    border-radius: 999px;
+    box-shadow: var(--hourforge-shadow);
+    overflow: hidden;
+  }
 
   ::ng-deep {
     --box-shadow: none;
-    --color: #333;
-    --icon-color: #666;
-    --padding: 0;
+    --color: var(--hourforge-text);
+    --icon-color: var(--hourforge-text-muted);
     font-size: 14px;
     width: 100%;
   }
 }
 
-.add-icon { font-size: 36px; }
+.search-wrapper > ion-button {
+  margin-top: 2px;
+}
+
+.add-icon { font-size: 36px; color: var(--hourforge-blue); }
 .delete-icon { font-size: 20px; }
 
 .form-row {
@@ -78,8 +93,9 @@ ion-content.page-wrapper {
   --padding-end: 14px;
   --padding-top: 2px;
   --padding-bottom: 2px;
-  --border-radius: 20px;
+  --border-radius: 999px;
   text-transform: none;
+  font-weight: 600;
 
   &::part(native) {
     font-size: 12px;
@@ -94,19 +110,23 @@ ion-content.page-wrapper {
 
 .employee-table {
   display: grid;
-  grid-template-columns:repeat(2,2fr) repeat(4, 1fr) auto;
+  grid-template-columns: repeat(2, 2fr) repeat(4, 1fr) auto;
   gap: 8px 12px;
   align-items: center;
   margin-bottom: 16px;
+  padding: 14px 12px;
+  background: var(--hourforge-glass-strong);
+  border: none;
+  border-radius: var(--hourforge-radius-lg);
+  box-shadow: var(--hourforge-shadow);
 }
 
 .grid-header {
   display: contents;
   font-weight: 600;
   text-align: left;
-  border: 1px solid #747474;
-  padding-bottom: 4px;
   font-size: 12px;
+  color: var(--hourforge-text-muted);
 
   > div { padding: 8px 4px; }
 }
@@ -119,15 +139,16 @@ ion-content.page-wrapper {
   ion-datetime-button::part(native),
   ion-button::part(native) {
     font-size: 14px !important;
-    border-radius: 20px;
+    border-radius: var(--hourforge-radius-sm);
   }
 
   input {
     width: 100%;
     padding: 6px 8px;
-    border-radius: 20px;
-    border: 1px solid #747474;
-    background-color: transparent;
+    border-radius: var(--hourforge-radius-sm);
+    border: 1px solid var(--hourforge-border);
+    background: var(--hourforge-glass-tint);
+    color: var(--hourforge-text);
     font-size: 14px;
     text-align: center;
     outline: none;
@@ -144,35 +165,38 @@ ion-content.page-wrapper {
     grid-column: 1 / -1;
     margin-top: 0;
     font-size: 12px;
-    color: var(--ion-color-dark);
+    color: var(--hourforge-text-muted);
   }
 }
 
-.auto-complete-employee { border: 1px solid #747474; border-radius: 20px; }
-
-.add-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  background: transparent;
-  cursor: pointer;
-  font-size: 14px;
+.auto-complete-employee {
+  border: 1px solid var(--hourforge-border);
+  border-radius: var(--hourforge-radius-sm);
+  background: var(--hourforge-glass-tint);
 }
 
 .page-wrapper .sub-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
   display: block;
+  color: var(--hourforge-text);
 }
 
 .no-background {
-  border-radius: 20px;
+  --background: var(--hourforge-glass-strong);
+  --border-color: var(--hourforge-border-strong);
+  --border-width: 1px;
+  --border-style: solid;
+  --border-radius: var(--hourforge-radius-sm);
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  border: none;
+  border-radius: var(--hourforge-radius-sm);
   margin-top: 10px;
-  border: 1px solid #747474;
+  box-shadow: var(--hourforge-shadow);
   height: 34px;
+  overflow: hidden;
 
   &ion-item::part(native) {
     background-color: transparent !important;
@@ -188,10 +212,17 @@ ion-content.page-wrapper {
   }
 
   ion-item {
-    --border-radius: 20px;
-    --border-color: #747474;
+    --border-radius: var(--hourforge-radius-sm);
+    --border-color: var(--hourforge-border-strong);
     --border-width: 1px;
     --border-style: solid;
+    --background: var(--hourforge-glass-strong);
+    --inner-border-width: 0;
+    --highlight-height: 0;
+    border: none;
+    box-shadow: var(--hourforge-shadow);
+    border-radius: var(--hourforge-radius-sm);
+    overflow: hidden;
 
     &::part(native) {
       --background: transparent;
@@ -206,9 +237,10 @@ ion-content.page-wrapper {
   position: relative;
 
   .submit-btn {
-    --border-radius: 20px;
+    --border-radius: 999px;
     padding: 10px 20px;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 600;
     min-width: 200px;
     --padding-start: 14px;
     --padding-end: 14px;
@@ -250,6 +282,7 @@ ion-content.page-wrapper {
     text-align: left;
     font-size: 14px;
     padding: 0;
+    color: var(--hourforge-text);
   }
 }
 
@@ -257,8 +290,9 @@ ion-content.page-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #747474;
-  border-radius: 20px;
+  border: 1px solid var(--hourforge-border);
+  border-radius: var(--hourforge-radius-sm);
+  background: var(--hourforge-glass-tint);
   padding: 6px 12px;
   gap: 2px;
 
@@ -268,21 +302,23 @@ ion-content.page-wrapper {
     padding: 0;
     font-size: 14px;
     text-align: center;
+    color: var(--hourforge-text);
   }
 }
 
 .time-btn-text {
   font-size: 14px;
+  color: var(--hourforge-text-muted);
 }
-
 
 .time-btn::part(native) {
   flex-grow: 1;
   margin: 0;
-  background: transparent;
-  border: 1px solid #747474;
+  background: var(--hourforge-glass-tint);
+  border: 1px solid var(--hourforge-border);
+  color: var(--hourforge-text);
   font-size: 14px !important;
-  border-radius: 20px;
+  border-radius: var(--hourforge-radius-sm);
 }
 
 .delete-btn { margin: 0; min-height: auto; min-width: auto; }
@@ -310,30 +346,74 @@ ion-content.page-wrapper {
 
     p {
       font-size: 12px;
-      margin: 0;
+      margin: 0 0 6px;
       font-weight: 600;
+      color: var(--hourforge-text-muted);
     }
 
     span {
-      display: block;
-      font-size: 12px;
-      color: #000;
-      font-weight: 600;
-      border: 2px solid #000;
-      padding: 10px 14px;
-      background-color: #e2e2e2;
-      border-radius: 20px;
+      display: inline-block;
+      font-size: 13px;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--hourforge-blue) 0%, var(--hourforge-blue-deep) 100%);
+      border-radius: 999px;
+      box-shadow: 0 6px 18px rgba(44, 180, 235, 0.35);
     }
   }
 }
 
-.type-toggle {
-  grid-template-columns: repeat(2, 1fr);
-  margin: 20px 0;
+.type-seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 16px 0 20px;
+  border-radius: var(--hourforge-radius);
+  background: var(--hourforge-glass-strong);
+  box-shadow: var(--hourforge-shadow);
 
-  .toggle-button {
-    font-size: 14px;
-    text-transform: none;
+  &__btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: calc(var(--hourforge-radius) - 4px);
+    padding: 10px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hourforge-text-muted);
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &--active {
+      color: #fff;
+      background: var(--ion-color-primary);
+    }
+  }
+}
+
+.invoice-readonly {
+  opacity: 1 !important;
+  --color: var(--hourforge-text);
+
+  ion-input {
+    opacity: 1;
+    --color: var(--hourforge-text);
+  }
+}
+
+:host ::ng-deep .invoice-readonly {
+  opacity: 1 !important;
+
+  .native-input,
+  input {
+    opacity: 1 !important;
+    color: var(--hourforge-text) !important;
+    -webkit-text-fill-color: var(--hourforge-text) !important;
   }
 }
 
@@ -350,10 +430,11 @@ ion-content.page-wrapper {
     .input-label {
       font-size: 12px;
       margin-bottom: 10px;
+      color: var(--hourforge-text);
     }
 
     .title {
-      font-weight: 600;
+      font-weight: 700;
       margin-top: 20px;
     }
 
@@ -366,12 +447,6 @@ ion-content.page-wrapper {
       margin-bottom: 20px;
     }
 
-    .sign-btn {
-      display: block;
-      width: 100%;
-      background-color: transparent;
-    }
-
     .sign-label-container {
       display: flex;
       justify-content: space-between;
@@ -380,8 +455,10 @@ ion-content.page-wrapper {
 
     .sign-container {
       height: 150px;
-      border: 1px solid #747474;
-      border-radius: 20px;
+      border: 1px solid var(--hourforge-border);
+      border-radius: var(--hourforge-radius);
+      background: var(--hourforge-glass);
+      box-shadow: var(--hourforge-shadow);
       overflow: hidden;
 
       &.has-img {
@@ -392,13 +469,12 @@ ion-content.page-wrapper {
         height: 100%;
         width: 100%;
         object-fit: contain;
-
       }
     }
   }
 }
 
-.validation-text{
+.validation-text {
   color: #ff2a2a;
   font-size: 12px;
 }

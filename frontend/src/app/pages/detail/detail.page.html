@@ -4,7 +4,7 @@
       <ion-back-button
         default-href="/"
         icon="chevron-back-outline"
-        text="Zurück"
+        [text]="'LBL_BACK' | translate"
       ></ion-back-button>
     </ion-buttons>
     <ion-title class="ion-text-center"
@@ -16,6 +16,7 @@
         shape="round"
         size="small"
         class="settings-icon"
+        [attr.aria-label]="'ARIA_SETTINGS' | translate"
       >
         <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
       </ion-button>
@@ -26,7 +27,7 @@
 <ion-content [fullscreen]="true" class="page-wrapper">
   @if (jobForm) {
   <div class="d-flex">
-    <h2 color="dark">{{"ORDER_DETAILS"|translate}}</h2>
+    <h2>{{"ORDER_DETAILS"|translate}}</h2>
     <div class="d-flex">
       @if(isEditMode){
       <ion-button
@@ -36,15 +37,16 @@
         fill="clear"
         color="danger"
         shape="round"
+        [attr.aria-label]="'ARIA_DELETE_ORDER' | translate"
       >
         <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
       </ion-button>
       }
       <ion-button
-        fill="outline"
+        fill="solid"
         shape="round"
         class="btn-primary"
-        color="dark"
+        color="primary"
         [disabled]="jobForm.invalid"
         (click)="openExportModal()"
       >
@@ -58,14 +60,28 @@
     </div>
   </div>
 
-  <ion-segment class="type-toggle" color="dark" justify="start" [(ngModel)]="recordType">
-    <ion-segment-button class="toggle-button" value="timesheet">
-      {{ 'TIMESHEET' | translate}}
-    </ion-segment-button>
-    <ion-segment-button class="toggle-button" value="performance">
-      {{ 'PERFORMANCE' | translate}}
-    </ion-segment-button>
-  </ion-segment>
+  <div
+    class="type-seg"
+    role="group"
+    [attr.aria-label]="'RECORD_TYPE' | translate"
+  >
+    <button
+      type="button"
+      class="type-seg__btn"
+      [class.type-seg__btn--active]="recordType === 'timesheet'"
+      (click)="recordType = 'timesheet'"
+    >
+      {{ 'TIMESHEET' | translate }}
+    </button>
+    <button
+      type="button"
+      class="type-seg__btn"
+      [class.type-seg__btn--active]="recordType === 'performance'"
+      (click)="recordType = 'performance'"
+    >
+      {{ 'PERFORMANCE' | translate }}
+    </button>
+  </div>
 
   <form [formGroup]="jobForm">
     <ion-label position="stacked" class="sub-title"
@@ -84,8 +100,9 @@
       <ion-button
         fill="clear"
         shape="round"
-        color="dark"
+        color="primary"
         (click)="openAddModel()"
+        [attr.aria-label]="'ARIA_ADD_CUSTOMER' | translate"
       >
         <ion-icon
           slot="icon-only"
@@ -99,7 +116,7 @@
       <div class="form-row">
           <div class="date-field">
             <ion-label position="stacked" class="sub-title"
-              >Nachtschichtzeit
+              >{{"NIGHTSHIFT_TIME" | translate}}
             </ion-label>
 
               <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('nightShiftTime')">
@@ -108,7 +125,7 @@
                     id="nightShiftTime"
                     presentation="time"
                     formControlName="nightShiftTime"
-                    locale="de-DE"
+                    [locale]="locale"
                     [showDefaultButtons]="true"
                     [doneText]="'DONE' | translate"
                     [cancelText]="'CANCEL' | translate"
@@ -148,21 +165,14 @@
         <ion-label position="stacked" class="sub-title"
           >{{ "INVOICE_NUMBER" | translate }}</ion-label
         >
-        <ion-item
-          lines="none"
-          class="no-background"
-          [class.invalid-input]="jobForm.controls['invoiceNumber'].touched && jobForm.controls['invoiceNumber'].invalid"
-        >
-          <ion-input formControlName="invoiceNumber" type="number" inputmode="numeric" min="0"></ion-input>
+        <ion-item lines="none" class="no-background invoice-readonly">
+          <ion-input
+            formControlName="invoiceNumber"
+            type="text"
+            [readonly]="true"
+            [placeholder]="'INVOICE_PENDING' | translate"
+          ></ion-input>
         </ion-item>
-        @if (
-          jobForm.controls['invoiceNumber'].touched &&
-          jobForm.controls['invoiceNumber'].invalid
-        ) {
-          <span class="validation-text"
-            >*{{ 'INVOICE_NUMBER_VALIDATION' | translate }}</span
-          >
-        }
       </div>
     }
     
@@ -195,7 +205,7 @@
                 id="date{{ i }}"
                 presentation="date"
                 formControlName="date"
-                locale="de-DE"
+                [locale]="locale"
                 [showDefaultButtons]="true"
                 [doneText]="'DONE' | translate"
                 [cancelText]="'CANCEL' | translate"
@@ -217,7 +227,7 @@
                 id="start{{ i }}"
                 presentation="time"
                 formControlName="start"
-                locale="de-DE"
+                [locale]="locale"
                 [showDefaultButtons]="true"
                 [doneText]="'DONE' | translate"
                 [cancelText]="'CANCEL' | translate"
@@ -234,7 +244,7 @@
                 id="end{{ i }}"
                 presentation="time"
                 formControlName="end"
-                locale="de-DE"
+                [locale]="locale"
                 [showDefaultButtons]="true"
                 [doneText]="'DONE' | translate"
                 [cancelText]="'CANCEL' | translate"
@@ -252,7 +262,7 @@
               class="dateBtn-container-button"
               datetime="pause{{ i }}"
             ></ion-datetime-button>
-            <span class="time-btn-text">Std.</span>
+            <span class="time-btn-text">{{ 'HOURS_ABBR' | translate }}</span>
           </div>
           <ion-modal [keepContentsMounted]="true" (willPresent)="resetSelection('pause',entry)">
             <ng-template>
@@ -263,7 +273,7 @@
                 [showDefaultButtons]="true"
                 [doneText]="'DONE' | translate"
                 [cancelText]="'CANCEL' | translate"
-                locale="de-DE"
+                [locale]="locale"
               ></ion-datetime>
             </ng-template>
           </ion-modal>
@@ -274,11 +284,12 @@
         <div>
           <ion-button
             fill="clear"
-            color="dark"
+            color="medium"
             shape="round"
             [disabled]="entries.controls.length <= 1"
             (click)="removeEmployee($index)"
             class="delete-btn"
+            [attr.aria-label]="'ARIA_DELETE_ENTRY' | translate"
           >
             <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-button>
@@ -297,14 +308,15 @@
         expand="block"
         size="small"
         fill="clear"
-        color="dark"
+        color="primary"
         shape="round"
+        [attr.aria-label]="'ARIA_ADD_ENTRY' | translate"
       >
         <ion-icon name="add-circle" class="add-icon"></ion-icon>
       </ion-button>
       <div class="total-time">
         <p class="sub-title">{{"TOTAL_TIME"|translate}}</p>
-        <span>{{ jobForm.value?.totalTime }} Std.</span>
+        <span>{{ jobForm.value?.totalTime }} {{ 'HOURS_ABBR' | translate }}</span>
       </div>
     </div>
 
@@ -346,7 +358,7 @@
                 <ion-datetime
                   id="employeeDate"
                   presentation="date"
-                  locale="de-DE"
+                  [locale]="locale"
                   [doneText]="'DONE' | translate"
                   [cancelText]="'CANCEL' | translate"
                   [formatOptions]="{date:{day: '2-digit' ,month: 'long', year: 'numeric'
@@ -373,6 +385,7 @@
                 color="danger"
                 shape="round"
                 [disabled]="!jobForm.value?.employeeSignature"
+                [attr.aria-label]="'ARIA_DELETE_SIGNATURE' | translate"
               >
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
@@ -409,7 +422,7 @@
                 <ion-datetime
                   id="employerDate"
                   presentation="date"
-                  locale="de-DE"
+                  [locale]="locale"
                   [doneText]="'DONE' | translate"
                   [cancelText]="'CANCEL' | translate"
                   [formatOptions]="{date:{day: '2-digit' ,month: 'long', year: 'numeric'
@@ -436,6 +449,7 @@
                 color="danger"
                 shape="round"
                 [disabled]="!jobForm.value?.employerSignature"
+                [attr.aria-label]="'ARIA_DELETE_SIGNATURE' | translate"
               >
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>

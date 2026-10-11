@@ -5,35 +5,34 @@
       {{ 'SIGNATURE' | translate }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" fill="clear">
-        <ion-icon name="close-outline" class="close-icon"></ion-icon>
+      <ion-button
+        (click)="closeModal()"
+        fill="clear"
+        [attr.aria-label]="'ARIA_CLOSE' | translate"
+      >
+        <ion-icon name="close-outline" class="hf-dialog-close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding page-wrapper modal-content">
-  <canvas
-    #signatureCanvas
-    class="sign-canvas"
-  ></canvas>
+  <canvas #signatureCanvas class="sign-canvas"></canvas>
 
   <div class="action-buttons">
     <ion-button
       (click)="removeSign()"
       expand="block"
-      class="btn-primary"
+      class="hf-dialog-btn"
       fill="clear"
       color="danger"
-      slot="start"
     >
-       {{"CLEAR" | translate }}
+      {{ 'CLEAR' | translate }}
     </ion-button>
     <ion-button
       expand="block"
-      slot="end"
       color="primary"
-      class="btn-primary"
+      class="hf-dialog-btn"
       (click)="sendData()"
       [disabled]="isCleared"
     >

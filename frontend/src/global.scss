@@ -1,37 +1,254 @@
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
-/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+@import '@ionic/angular/css/palettes/dark.class.css';
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* Soft wash — no wavy image needed; works in light + dark via CSS vars */
+ion-content.page-wrapper,
+ion-content.ion-padding {
+  --background: var(--hourforge-page-wash);
+}
+
+ion-header.header ion-toolbar {
+  --background: var(--hourforge-header-bg);
+  --color: var(--hourforge-text);
+  --border-width: 0;
+  backdrop-filter: blur(var(--hourforge-blur));
+  -webkit-backdrop-filter: blur(var(--hourforge-blur));
+}
+
+.hf-glass {
+  background: var(--hourforge-glass-strong);
+  border: none;
+  border-radius: var(--hourforge-radius-lg);
+  box-shadow: var(--hourforge-shadow);
+  backdrop-filter: blur(var(--hourforge-blur));
+  -webkit-backdrop-filter: blur(var(--hourforge-blur));
+}
+
+/* Shared soft-glass field chrome (detail / modals / settings) */
+.hf-field {
+  border: 1px solid var(--hourforge-border) !important;
+  --border-color: var(--hourforge-border);
+  background: var(--hourforge-glass);
+  border-radius: var(--hourforge-radius-sm);
+  box-shadow: var(--hourforge-shadow);
+  backdrop-filter: blur(var(--hourforge-blur));
+  -webkit-backdrop-filter: blur(var(--hourforge-blur));
+}
+
+.hf-empty {
+  text-align: center;
+  padding: 2.25rem 1.25rem;
+  color: var(--hourforge-text-muted);
+
+  p {
+    margin: 0 0 0.35rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--hourforge-text);
+  }
+
+  span {
+    font-size: 0.85rem;
+  }
+}
+
+ion-footer.footer ion-toolbar,
+ion-footer ion-toolbar {
+  --background: var(--hourforge-header-bg);
+  --border-width: 0;
+  backdrop-filter: blur(var(--hourforge-blur));
+  -webkit-backdrop-filter: blur(var(--hourforge-blur));
+}
+
+ion-modal::part(content) {
+  --background: var(--hourforge-glass-strong);
+  border: none;
+  box-shadow: var(--hourforge-shadow-lg);
+}
+
+/* Centered card dialogs — never sheets (no breakpoints) */
+ion-modal.hf-dialog {
+  --width: min(480px, 92vw);
+  --height: auto;
+  --max-height: min(85vh, 560px);
+  --border-radius: 20px;
+  --box-shadow: var(--hourforge-shadow-lg, 0 16px 40px rgba(0, 0, 0, 0.25));
+}
+
+ion-modal.hf-dialog::part(content) {
+  border-radius: 20px;
+  overflow: hidden;
+  height: auto !important;
+  max-height: var(--max-height, min(85vh, 560px));
+}
+
+ion-modal.hf-dialog::part(backdrop) {
+  opacity: 0.55;
+}
+
+/* ion-content absolute-fills by default — unwind that for auto-height cards */
+ion-modal.hf-dialog .ion-page {
+  position: relative;
+  display: block;
+  contain: content;
+  height: auto;
+}
+
+ion-modal.hf-dialog ion-header {
+  position: relative;
+}
+
+ion-modal.hf-dialog ion-content {
+  position: relative;
+  display: block;
+  flex: none;
+  height: auto;
+  contain: content;
+}
+
+ion-modal.hf-dialog ion-content::part(scroll) {
+  position: relative;
+  contain: content;
+}
+
+ion-modal.hf-dialog ion-footer {
+  position: relative;
+}
+
+ion-modal.hf-dialog--sm {
+  --width: min(380px, 92vw);
+}
+
+ion-modal.hf-dialog--md {
+  --width: min(520px, 92vw);
+  --max-height: min(85vh, 560px);
+}
+
+ion-modal.hf-dialog--lg {
+  --width: min(80vw, 720px);
+  --height: min(90vh, 420px);
+  --max-height: 420px;
+}
+
+ion-modal.hf-dialog--lg::part(content) {
+  height: min(90vh, 420px) !important;
+  max-height: 420px;
+}
+
+/* Signature needs a real height so the canvas can fill */
+ion-modal.hf-dialog--lg .ion-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  contain: none;
+}
+
+ion-modal.hf-dialog--lg ion-content {
+  flex: 1;
+  height: auto;
+  contain: none;
+}
+
+ion-modal.hf-dialog--export {
+  --width: min(80vw, 480px);
+}
+
+ion-modal.hf-dialog ion-header.header ion-toolbar {
+  --background: transparent;
+  --min-height: 48px;
+  box-shadow: none;
+}
+
+ion-modal.hf-dialog ion-header.header ion-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+ion-modal.hf-dialog .hf-dialog-close {
+  font-size: 28px;
+}
+
+ion-modal.hf-dialog .hf-dialog-btn {
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --border-radius: 999px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+.hf-brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  background: transparent;
+}
+
+/* Keep focus visible for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--hourforge-blue);
+  outline-offset: 2px;
+}
+
+/* Bluish theme-matched scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ion-color-primary) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ion-color-primary) 70%, transparent);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--ion-color-primary);
+}
+
+/* Avoid autofill painting a second white box inside glass fields */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--hourforge-text) !important;
+  caret-color: var(--hourforge-text);
+  transition: background-color 99999s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  ion-header.header ion-toolbar,
+  .hf-glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--hourforge-glass-strong);
+  }
+}

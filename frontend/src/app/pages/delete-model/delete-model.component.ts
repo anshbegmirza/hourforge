@@ -1,4 +1,14 @@
-import { ModalController } from '@ionic/angular/standalone';
+import {
+  ModalController,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonIcon,
+  IonContent,
+  IonLabel,
+} from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { addIcons } from 'ionicons';
@@ -11,7 +21,18 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   templateUrl: './delete-model.component.html',
   styleUrls: ['./delete-model.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslatePipe],
+  imports: [
+    CommonModule,
+    TranslatePipe,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
+    IonIcon,
+    IonContent,
+    IonLabel,
+  ],
 })
 export class DeleteModelComponent implements OnInit {
   private modalCtrl = inject(ModalController);

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 280">
-  <rect x="1" y="1" width="278" height="278" fill="#fff" stroke="#000" stroke-width="2"/>
-  <path fill="#000" d="
-    M44 72h36v40l22 22v74H44V72zm58 0h36v38l-20 20v78h20V72zm50 0h92v32H178v22h54v32H178v50h-36V72z
-  "/>
-  <polygon fill="#fff" points="128,150 154,176 154,204 128,178"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 280" shape-rendering="geometricPrecision">
+  <rect x="1.5" y="1.5" width="277" height="277" fill="#fff" stroke="#111" stroke-width="3"/>
+  <g fill="#2CB4EB">
+    <rect x="36" y="52" width="42" height="176"/>
+    <polygon points="102,52 144,52 144,118 128,134 102,134"/>
+    <polygon points="78,118 128,118 144,134 144,160 78,160"/>
+    <polygon points="102,160 128,160 144,176 144,228 102,228"/>
+    <rect x="168" y="52" width="42" height="176"/>
+    <rect x="168" y="52" width="76" height="40"/>
+    <polygon points="168,134 184,118 244,118 244,160 168,160"/>
+  </g>
   <text
     x="320"
     y="172"
-    fill="#000"
+    fill="#111111"
     font-family="Arial, Helvetica, sans-serif"
     font-size="88"
     font-weight="700"

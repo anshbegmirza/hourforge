@@ -3,7 +3,7 @@ ion-header.header {
   box-shadow: none;
   padding: 12px 0 0 0 !important;
 
-  ion-title{
+  ion-title {
     font-size: 16px;
     font-weight: 700;
   }
@@ -12,85 +12,34 @@ ion-header.header {
 .header ion-toolbar {
   --background: transparent !important;
   --border-width: 0;
-  .close-icon{
-  font-size: 28px !important;
-}
 }
 
-.page-wrapper {
-  .title{
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    padding:0px;
-    padding-left: 4px;
-  }
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-
-  ion-button {
-    --padding-start: 12px;
-    --padding-end: 12px;
-    --padding-top: 4px;
-    --padding-bottom: 4px;
-    --border-radius: 20px;
-    font-size: 12px;
-    text-transform: none;
-  }
-}
-
-::ng-deep ion-modal::part(content) {
-  height: 70% !important;
-  width: 90% !important;
-  max-height: 250px !important;
-  border-radius: 20px !important;
-  margin: auto;
-}
-
-.footer {
-  .action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin: 0 12px 12px 0;
-
-    ion-button {
-      margin-left: 8px;
-    }
-  }
-}
-
-::ng-deep ion-modal.exportModel::part(content){
-  height: 80% !important;
-  width: 80%;
-  border-radius: 20px;
-  max-height: 250px;
-}
-
-::ng-deep ion-modal.listPage-exportModel::part(content){
-  max-height: 360px !important;
-}
-
-::ng-deep ion-modal.exportModel::part(backdrop) {
-  opacity: 0.7;
+.footer ion-toolbar {
+  --background: transparent;
+  --padding-end: 12px;
+  --padding-bottom: 8px;
 }
 
 .export {
-  --background: transparent !important;
-  border: 1px solid var(--ion-color-medium);
-  border-radius: 20px;
+  --background: var(--hourforge-glass-strong) !important;
+  --border-color: var(--hourforge-border-strong);
+  --border-width: 1px;
+  --border-style: solid;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  border: none;
+  border-radius: var(--hourforge-radius-sm);
+  box-shadow: var(--hourforge-shadow);
   margin-bottom: 18px;
+  overflow: hidden;
 }
 
 .export-select {
   --background: transparent !important;
-  --placeholder-color: var(--ion-color-dark);
-  --color: var(--ion-color-dark);
+  --placeholder-color: var(--hourforge-text-muted);
+  --color: var(--hourforge-text);
   font-size: 14px;
-  border-radius: 20px;
+  border-radius: var(--hourforge-radius-sm);
 }
 
 .export-select::part(icon) {
@@ -98,7 +47,7 @@ ion-header.header {
   right: 0;
 }
 
-::ng-deep {
+:host ::ng-deep {
   .export-popover::part(content) {
     --width: 85%;
     --offset-y: 18px;

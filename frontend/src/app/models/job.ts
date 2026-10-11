@@ -6,7 +6,7 @@ export interface Job {
   jobNumber: number;
   customer: Customer;
   nightShiftTime: string;
-  invoiceNumber: number;
+  invoiceNumber: string;
   hourlyRate: number;
   entries: JobEntry[];
   comment: string;

@@ -2,8 +2,12 @@
   <ion-toolbar>
     <ion-title>{{ 'EXPORT_MODEL' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" fill="clear">
-        <ion-icon name="close-outline" class="close-icon"></ion-icon>
+      <ion-button
+        (click)="closeModal()"
+        fill="clear"
+        [attr.aria-label]="'ARIA_CLOSE' | translate"
+      >
+        <ion-icon name="close-outline" class="hf-dialog-close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -46,15 +50,16 @@
 </ion-content>
 
 <ion-footer class="footer">
-  <div class="action-buttons">
-    <ion-button
-      color="primary"
-      slot="icon-only"
-      (click)="confirmExport()"
-      class="btn-primary"
-      [disabled]="!selectedEmployeeId && isListView"
-    >
-      {{ 'EXPORT_MODEL' | translate }}
-    </ion-button>
-  </div>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button
+        color="primary"
+        class="hf-dialog-btn"
+        (click)="confirmExport()"
+        [disabled]="!selectedEmployeeId && isListView"
+      >
+        {{ 'EXPORT_MODEL' | translate }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-footer>

@@ -29,6 +29,9 @@ import {
   chevronBackOutline,
   refreshOutline,
   logOutOutline,
+  contrastOutline,
+  sunnyOutline,
+  moonOutline,
 } from 'ionicons/icons';
 import { AddModelComponent } from '../add-model/add-model.component';
 import { addIcons } from 'ionicons';
@@ -39,6 +42,7 @@ import { Job } from 'src/app/models/job';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { LanguageService } from 'src/app/services/language.service';
+import { AppTheme, ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-settings',
@@ -75,11 +79,19 @@ export class SettingsPage implements OnInit {
   private jobService = inject(JobService);
   private authService = inject(AuthService);
   languageService = inject(LanguageService);
+  private themeService = inject(ThemeService);
 
   employees?: Employee[];
   customers?: Customer[];
   jobs?: Job[];
   selectedLang = this.languageService.current;
+  selectedTheme = this.themeService.current;
+  readonly themeOptions: AppTheme[] = ['auto', 'light', 'dark'];
+  readonly themeIcons: Record<AppTheme, string> = {
+    auto: 'contrast-outline',
+    light: 'sunny-outline',
+    dark: 'moon-outline',
+  };
 
   constructor() {
     addIcons({
@@ -89,6 +101,9 @@ export class SettingsPage implements OnInit {
       chevronBackOutline,
       refreshOutline,
       logOutOutline,
+      contrastOutline,
+      sunnyOutline,
+      moonOutline,
     });
   }
 
@@ -98,15 +113,18 @@ export class SettingsPage implements OnInit {
   }
 
   async openAddModel(type: 'employee' | 'customer', data?: any) {
+    const isEmployee = type === 'employee';
     const modal = await this.modalCtrl.create({
       component: AddModelComponent,
       componentProps: {
-        isEmployee: type === 'employee',
+        isEmployee,
         isEditData: data,
       },
       backdropDismiss: true,
-      breakpoints: [0, 0.3, 0.5, 1],
-      cssClass: [type === 'employee' ? 'employee-modal' : 'addModal'],
+      cssClass: [
+        'hf-dialog',
+        isEmployee ? 'hf-dialog--sm' : 'hf-dialog--md',
+      ],
     });
 
     modal.onDidDismiss().then(async (result) => {
@@ -256,6 +274,11 @@ export class SettingsPage implements OnInit {
         // local preference still applied
       }
     }
+  }
+
+  onThemeChange(mode: AppTheme) {
+    this.selectedTheme = mode;
+    this.themeService.setTheme(mode);
   }
 
   async logout() {

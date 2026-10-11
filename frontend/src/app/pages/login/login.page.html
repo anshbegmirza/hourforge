@@ -1,17 +1,26 @@
-<ion-header>
+<ion-header [translucent]="true" class="header">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Hourforge</ion-title>
+    <ion-title class="ion-text-center">
+      <span class="brand-title">
+        <img
+          class="hf-brand-mark"
+          src="assets/icon/PNG/Hourforge-App-Icon.png"
+          alt="Hourforge"
+        />
+        Hourforge
+      </span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="auth-wrap">
+  <div class="auth-wrap hf-glass">
     <h2>
       {{ (mode === 'login' ? 'AUTH_LOGIN' : 'AUTH_REGISTER') | translate }}
     </h2>
     <p class="hint">{{ 'AUTH_SUBTITLE' | translate }}</p>
 
-    <ion-list lines="full">
+    <ion-list lines="none">
       @if (mode === 'register') {
         <ion-item>
           <ion-input
@@ -62,11 +71,11 @@
       </ion-item>
     </ion-list>
 
-    <ion-button expand="block" [disabled]="busy" (click)="submit()">
+    <ion-button expand="block" color="primary" [disabled]="busy" (click)="submit()">
       {{ (mode === 'login' ? 'AUTH_LOGIN' : 'AUTH_REGISTER') | translate }}
     </ion-button>
 
-    <ion-button expand="block" fill="clear" (click)="switchMode()">
+    <ion-button expand="block" fill="clear" color="primary" (click)="switchMode()">
       {{
         (mode === 'login' ? 'AUTH_NEED_ACCOUNT' : 'AUTH_HAVE_ACCOUNT')
           | translate

@@ -13,13 +13,14 @@ import {
   IonItemGroup,
   IonSearchbar,
 } from '@ionic/angular/standalone';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { DatePipe, KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  add,
   settingsOutline,
   addCircle,
   camera,
@@ -47,6 +48,7 @@ import {
   monthNameToIndex,
   toEnglishMonthLabel,
 } from 'src/app/utils/export-format';
+import { LanguageService } from 'src/app/services/language.service';
 pdfMake.vfs = pdfFonts as any;
 
 @Component({
@@ -75,18 +77,27 @@ pdfMake.vfs = pdfFonts as any;
   ],
 })
 export class ListPage implements OnInit {
+  @ViewChild(IonSearchbar, { read: ElementRef })
+  private searchbarRef?: ElementRef<HTMLElement>;
+
   jobService = inject(JobService);
   utilsService = inject(UtilsService);
+  private languageService = inject(LanguageService);
   searchQuery = '';
   jobs: Job[] = [];
   jobsByMonth: Record<string, Job[]> = {};
   public modalCtrl = inject(ModalController);
   public logoBase64: string = '';
 
+  get locale(): string {
+    return this.languageService.locale;
+  }
+
   constructor() {
     addIcons({
       settingsOutline,
       addOutline,
+      add,
       addCircle,
       openOutline,
       chevronForwardOutline,
@@ -97,6 +108,26 @@ export class ListPage implements OnInit {
 
   ngOnInit() {
     this.toBase64(EXPORT_LOGO);
+  }
+
+  async ionViewDidEnter() {
+    await this.syncSearchAriaLabel();
+    // Ionic paints the shadow input a tick later
+    setTimeout(() => void this.syncSearchAriaLabel(), 0);
+  }
+
+  private async syncSearchAriaLabel() {
+    const label = await this.utilsService.translate('SEARCH_ORDERS');
+    const host = this.searchbarRef?.nativeElement as HTMLElement | undefined;
+    if (!host) return;
+    host.setAttribute('aria-label', label);
+    const input =
+      host.shadowRoot?.querySelector('input') ||
+      host.querySelector('input');
+    if (input) {
+      input.setAttribute('aria-label', label);
+      input.setAttribute('aria-labelledby', '');
+    }
   }
 
   ionViewWillEnter() {
@@ -120,7 +151,7 @@ export class ListPage implements OnInit {
 
     for (const job of this.jobs) {
       const jobDate = new Date(job.entries[0]?.date);
-      const key = jobDate.toLocaleString('de-DE', {
+      const key = jobDate.toLocaleString(this.locale, {
         month: 'long',
         year: 'numeric',
       });
@@ -166,7 +197,7 @@ export class ListPage implements OnInit {
       )
       ?.forEach((job) => {
         const jobDate = new Date(job.entries[0]?.date);
-        let key = jobDate?.toLocaleString('de-DE', {
+        let key = jobDate?.toLocaleString(this.locale, {
           month: 'long',
           year: 'numeric',
         });
@@ -594,7 +625,7 @@ export class ListPage implements OnInit {
         employeesList: employeeList,
         isListView: true,
       },
-      cssClass: 'exportModel listPage-exportModel',
+      cssClass: ['hf-dialog', 'hf-dialog--export', 'hf-dialog--export-tall'],
     });
 
     await modal.present();

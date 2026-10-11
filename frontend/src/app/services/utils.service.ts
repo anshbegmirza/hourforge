@@ -52,10 +52,13 @@ export class UtilsService {
 
   async showToast(
     message: string,
+    kind: 'success' | 'error' | 'warning' = 'success',
     duration = 2000,
     position: 'top' | 'bottom' | 'middle' = 'top',
-    color = 'primary',
   ) {
+    const color =
+      kind === 'error' ? 'danger' : kind === 'warning' ? 'warning' : 'success';
+    const closeLabel = await this.translate('ARIA_CLOSE');
     const t = await this.toastController.create({
       message: await this.translate(message, {}),
       duration,
@@ -67,7 +70,7 @@ export class UtilsService {
           side: 'end',
           role: 'cancel',
           htmlAttributes: {
-            'aria-label': 'close',
+            'aria-label': closeLabel,
           },
         },
       ],

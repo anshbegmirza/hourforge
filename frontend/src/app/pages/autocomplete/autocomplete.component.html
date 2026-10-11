@@ -1,20 +1,30 @@
-<ion-item lines="none" class="search-input" [class]="type">
+<ion-item
+  lines="none"
+  class="search-input"
+  [class]="type"
+  (click)="openDropdown()"
+>
   <ion-input
     class="auto-complete-input"
     [formControl]="searchControl"
     (ionFocus)="onFocus()"
+    (ionInput)="onIonInput($event)"
     (ionBlur)="onBlur()"
     [clearInput]="true"
   ></ion-input>
 </ion-item>
 
 @if (showDropdown) {
-  <div class="autocomplete-dropdown" [class]="type">
+  <div
+    class="autocomplete-dropdown"
+    [class]="type"
+    [ngStyle]="dropdownStyle"
+  >
     <ion-list>
       @for (item of filteredItems; track item.id) {
         <ion-item
           button
-          (click)="selectItem(item)"
+          (mousedown)="selectItem(item); $event.preventDefault()"
           [class.selected]="selectedItem?.id === item.id"
           class="list-item"
           [lines]="$last ? 'none' : 'full'"
@@ -28,7 +38,7 @@
       @if (showAddOption) {
         <ion-item
           button
-          (click)="addNewEmployee()"
+          (mousedown)="addNewEmployee(); $event.preventDefault()"
           class="add-option list-item"
           lines="none"
         >
@@ -42,7 +52,12 @@
       @if (filteredItems.length === 0 && !showAddOption) {
         <ion-item lines="none" class="list-item">
           <ion-label>
-            <p class="not_found_text">{{ (type==='customer' ? 'NO_CUSTOMER_FOUND' : 'NO_EMPLOYEE_FOUND') | translate }}</p>
+            <p class="not_found_text">
+              {{
+                (type === 'customer' ? 'NO_CUSTOMER_FOUND' : 'NO_EMPLOYEE_FOUND')
+                  | translate
+              }}
+            </p>
           </ion-label>
         </ion-item>
       }

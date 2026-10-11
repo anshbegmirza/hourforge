@@ -74,7 +74,7 @@ export class LoginPage {
       const msg =
         err?.error?.message ||
         (await this.utils.translate('AUTH_FAILED'));
-      this.utils.showToast(msg);
+      this.utils.showToast(msg, 'error');
     } finally {
       this.busy = false;
     }

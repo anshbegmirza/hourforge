@@ -4,7 +4,7 @@
       <ion-back-button
         default-href="/"
         icon="chevron-back-outline"
-        text="Zurück"
+        [text]="'LBL_BACK' | translate"
       ></ion-back-button>
     </ion-buttons>
     <ion-title class="ion-text-center"
@@ -34,14 +34,32 @@
         </ion-select>
       </ion-item>
     </ion-list>
+
+    <div class="section-toolbar">
+      <h6>{{"THEME" | translate}}</h6>
+    </div>
+    <div class="theme-seg" role="group" [attr.aria-label]="'THEME' | translate">
+      @for (opt of themeOptions; track opt) {
+      <button
+        type="button"
+        class="theme-seg__btn"
+        [class.theme-seg__btn--active]="selectedTheme === opt"
+        (click)="onThemeChange(opt)"
+      >
+        <ion-icon [name]="themeIcons[opt]" aria-hidden="true"></ion-icon>
+        {{ ('THEME_' + opt.toUpperCase()) | translate }}
+      </button>
+      }
+    </div>
     <div class="section-toolbar">
       <h6>{{"EMPLOYEE"| translate}}</h6>
       <ion-buttons class="actionables">
         <ion-button
           fill="clear"
           (click)="openAddModel('employee')"
-          color="dark"
+          color="primary"
           size="small"
+          [attr.aria-label]="'ARIA_ADD_EMPLOYEE' | translate"
         >
           <ion-icon
             slot="icon-only"
@@ -53,8 +71,9 @@
           [disabled]="!employees || employees.length === 0"
           fill="clear"
           (click)="openConfirmModel('employee', 'all')"
-          color="dark"
+          color="medium"
           size="small"
+          [attr.aria-label]="'ARIA_DELETE_ALL_EMPLOYEES' | translate"
         >
           <ion-icon
             slot="icon-only"
@@ -66,15 +85,16 @@
     </div>
 
     <ion-list lines="none">
-      @if (employees) { @for (employee of employees; track employee.id) {
+      @if (employees?.length) { @for (employee of employees; track employee.id) {
       <ion-item class="rounded-item">
         <div class="item-content">{{ employee.name }}</div>
         <ion-buttons slot="end" class="item-actions">
           <ion-button
-            color="dark"
+            color="primary"
             (click)="openAddModel('employee', employee)"
             fill="clear"
             size="small"
+            [attr.aria-label]="'ARIA_EDIT' | translate"
           >
             <ion-icon
               slot="icon-only"
@@ -83,10 +103,11 @@
             ></ion-icon>
           </ion-button>
           <ion-button
-            color="dark"
+            color="medium"
             (click)="openConfirmModel('employee', employee, employee?.name)"
             fill="clear"
             size="small"
+            [attr.aria-label]="'ARIA_DELETE' | translate"
           >
             <ion-icon
               slot="icon-only"
@@ -96,7 +117,12 @@
           </ion-button>
         </ion-buttons>
       </ion-item>
-      } }
+      } } @else {
+      <div class="hf-empty empty-inline">
+        <p>{{ 'NO_EMPLOYEES_YET' | translate }}</p>
+        <span>{{ 'ADD_HINT' | translate }}</span>
+      </div>
+      }
     </ion-list>
 
     <div class="section-toolbar">
@@ -105,8 +131,9 @@
         <ion-button
           fill="clear"
           (click)="openAddModel('customer')"
-          color="dark"
+          color="primary"
           size="small"
+          [attr.aria-label]="'ARIA_ADD_CUSTOMER' | translate"
         >
           <ion-icon
             slot="icon-only"
@@ -118,8 +145,9 @@
           fill="clear"
           [disabled]="!customers || customers.length === 0"
           (click)="openConfirmModel('customer', 'all')"
-          color="dark"
+          color="medium"
           size="small"
+          [attr.aria-label]="'ARIA_DELETE_ALL_CUSTOMERS' | translate"
         >
           <ion-icon
             slot="icon-only"
@@ -131,7 +159,7 @@
     </div>
 
     <ion-list lines="none">
-      @if (customers) { @for (customer of customers; track customer.companyName)
+      @if (customers?.length) { @for (customer of customers; track customer.companyName)
       {
       <ion-item class="rounded-item">
         <div class="item-content">
@@ -141,10 +169,11 @@
         </div>
         <ion-buttons slot="end" class="item-actions">
           <ion-button
-            color="dark"
+            color="primary"
             (click)="openAddModel('customer', customer)"
             fill="clear"
             size="small"
+            [attr.aria-label]="'ARIA_EDIT' | translate"
           >
             <ion-icon
               slot="icon-only"
@@ -153,10 +182,11 @@
             ></ion-icon>
           </ion-button>
           <ion-button
-            color="dark"
+            color="medium"
             (click)="openConfirmModel('customer', customer, customer?.companyName)"
             fill="clear"
             size="small"
+            [attr.aria-label]="'ARIA_DELETE' | translate"
           >
             <ion-icon
               slot="icon-only"
@@ -166,13 +196,19 @@
           </ion-button>
         </ion-buttons>
       </ion-item>
-      } }
+      } } @else {
+      <div class="hf-empty empty-inline">
+        <p>{{ 'NO_CUSTOMERS_YET' | translate }}</p>
+        <span>{{ 'ADD_HINT' | translate }}</span>
+      </div>
+      }
     </ion-list>
 
     <div class="reset-container">
       <ion-button
         [disabled]="customers?.length===0 && employees?.length===0 && jobs?.length === 0"
-        color="dark"
+        color="danger"
+        fill="outline"
         shape="round"
         (click)="openConfirmModel('reset', 'all')"
         class="btn-primary"
@@ -185,9 +221,9 @@
         ></ion-icon>
       </ion-button>
       <ion-button
-        color="medium"
+        color="primary"
         shape="round"
-        fill="outline"
+        fill="solid"
         (click)="logout()"
         class="btn-primary"
       >
@@ -200,7 +236,12 @@
 <ion-footer>
   <ion-item>
     <span class="version">Version {{ environment.version }}</span>
-    <ion-button (click)="reload()" slot="end" fill="outline">
+    <ion-button
+      (click)="reload()"
+      slot="end"
+      fill="outline"
+      [attr.aria-label]="'ARIA_RELOAD' | translate"
+    >
       <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
     </ion-button>
   </ion-item>

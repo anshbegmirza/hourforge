@@ -31,8 +31,16 @@ export class LanguageService {
     }
   }
 
+  /** BCP 47 locale for dates / datetime pickers. */
+  get locale(): string {
+    return { en: 'en-GB', de: 'de-DE', fr: 'fr-FR' }[this.current];
+  }
+
   private apply(lang: AppLang) {
     this.current = lang;
     this.translate.use(lang);
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
   }
 }

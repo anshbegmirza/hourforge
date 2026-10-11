@@ -54,7 +54,7 @@ function publicJob(row, customer, entries) {
     jobNumber: Number(row.job_number) || 0,
     customer: customer || null,
     nightShiftTime: row.night_shift_time || '',
-    invoiceNumber: Number(row.invoice_number) || 0,
+    invoiceNumber: row.invoice_number || '',
     hourlyRate: Number(row.hourly_rate) || 0,
     entries: entries || [],
     comment: row.comment || '',

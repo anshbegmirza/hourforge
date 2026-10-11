@@ -58,7 +58,7 @@ async function seedSampleData(conn, userId) {
       c1.insertId,
       1001,
       '22:00-06:00',
-      5001,
+      'IV26-A001',
       65.5,
       'Scaffold install — east wing',
       '16:30',
@@ -76,7 +76,7 @@ async function seedSampleData(conn, userId) {
       c2.insertId,
       1002,
       '',
-      5002,
+      'IV26-A002',
       48,
       'Kitchen remodel punch list',
       '7:45',
@@ -94,7 +94,7 @@ async function seedSampleData(conn, userId) {
       c3.insertId,
       1003,
       '23:00-05:00',
-      0,
+      'IV26-A003',
       72,
       'Night unload — random rain delay',
       '11:00',
@@ -128,7 +128,7 @@ async function seedSampleData(conn, userId) {
       (job_id, employee_id, entry_date, start_time, end_time, pause, duration,
        work_hours, night_hours, amount, surcharge_note, sort_order)
      VALUES
-      (?, ?, '2026-03-08', '22:00', '05:00', '00:30', '06:30', 4.0, 2.5, 468.0, 'Night surcharge', 0),
+      (?, ?, '2026-03-08', '22:00', '05:00', '00:30', '06:30', 6.5, 2.5, 468.0, 'Night surcharge', 0),
       (?, ?, '2026-03-09', '06:00', '10:30', '00:00', '04:30', 4.5, 0, 324.0, 'Coffee run counted as break? no.', 1)`,
     [j3.insertId, e2.insertId, j3.insertId, e3.insertId]
   );

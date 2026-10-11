@@ -1,5 +1,13 @@
 .add-icon {
-  font-size: 36px;
+  font-size: 22px;
+}
+
+.add-btn {
+  --padding-start: 10px;
+  --padding-end: 10px;
+  width: 40px;
+  height: 40px;
+  margin: 0;
 }
 
 .settings-icon {
@@ -9,127 +17,167 @@
 .header-start {
   height: 48px;
   width: 48px;
-  margin-left: 4px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.hf-brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  background: transparent;
 }
 
 .title {
-  margin-bottom: 26px;
-  font-size: 16px;
+  margin: 0 0 18px;
+  font-size: 1.35rem;
   font-weight: 700;
+  color: var(--hourforge-text);
+  letter-spacing: -0.02em;
 }
 
 .search-wrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
 ::ng-deep .search-container {
   flex: 1;
-  height: 36px;
-  border-radius: 1rem;
-  border: 1px solid #747474;
+  height: 44px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: none;
+  background: var(--hourforge-glass-strong);
   display: flex;
   align-items: center;
+  box-shadow: var(--hourforge-shadow);
 
   ion-searchbar {
+    --background: transparent;
     --box-shadow: none;
-    --color: #333;
-    --icon-color: #666;
-    --padding: 0px;
-
-    height: 36px;
+    --border-radius: 999px;
+    --color: var(--hourforge-text);
+    --icon-color: var(--hourforge-text-muted);
+    --placeholder-color: var(--hourforge-text-muted);
+    --padding: 0;
+    height: 44px;
     font-size: 14px;
-    border-radius: 1rem;
     width: 100%;
+    border-radius: 999px;
+    overflow: hidden;
 
-    .searchbar-input.sc-ion-searchbar-md {
-      padding: 6px 28px;
-    }
-
-    .searchbar-search-icon.sc-ion-searchbar-md {
-      inset-inline-start: 0;
+    .searchbar-input-container,
+    .searchbar-input,
+    input.searchbar-input {
+      border-radius: 999px !important;
     }
   }
 }
 
 .header {
   box-shadow: none;
-  --ion-background-color: #e2e2e2;
-  --color: #747474;
-}
-
-.right-icon {
-  background-color: transparent !important;
-  font-size: 2rem;
 }
 
 .custom-container {
-  border-radius: 16px;
   overflow: hidden;
+  padding: 4px 0 8px;
 
   .export-icon {
-    margin-right: 10px;
-    font-size: 18px;
+    font-size: 16px;
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
   }
 
   ion-item {
     --border-color: transparent;
     --background: transparent;
+    --color: var(--hourforge-text);
+    --detail-icon-color: var(--hourforge-blue);
+    --detail-icon-opacity: 1;
   }
 
   ion-item::part(detail-icon) {
-    font-size: 28px;
+    font-size: 22px;
+    color: var(--hourforge-blue);
+  }
+
+  .month-row {
+    --min-height: 52px;
+    margin-bottom: 4px;
+
+    .sub-title {
+      flex: 1;
+      min-width: 0;
+      padding-right: 8px;
+    }
+
+    .btn-primary {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+  }
+
+  .list-item {
+    --background: var(--hourforge-glass-tint);
+    --border-radius: var(--hourforge-radius-sm);
+    margin: 6px 10px;
+    border: 1px solid var(--hourforge-border);
+    border-radius: var(--hourforge-radius-sm);
   }
 }
 
 .sub {
   &-title {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--hourforge-text);
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
   &-header {
     h2 {
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--hourforge-text);
+      margin: 0 0 4px;
     }
-    p{
+    p {
       font-weight: 400;
-      font-size:12px;
+      font-size: 12px;
+      color: var(--hourforge-text-muted);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       max-width: 90%;
+      margin: 0;
     }
   }
 }
 
 ion-content.page-wrapper {
-  --padding-top: 24px;
-  --padding-bottom: 24px;
-  --padding-start: 24px;
-  --padding-end: 24px;
+  --padding-top: 20px;
+  --padding-bottom: 28px;
+  --padding-start: 20px;
+  --padding-end: 20px;
 }
 
 .btn-primary {
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --padding-top: 6px;
-  --padding-bottom: 6px;
-  --border-radius: 20px;
+  --padding-start: 12px;
+  --padding-end: 14px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --border-radius: 999px;
   text-transform: none;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0;
 }
-
-.custom-btn {
-  --background: transparent;
-  --background-activated: transparent;
-  --background-focused: transparent;
-  --background-hover: transparent;
-  --ripple-color: transparent;
-}
-
-

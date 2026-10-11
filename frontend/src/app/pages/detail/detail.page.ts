@@ -1,4 +1,4 @@
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -45,8 +45,6 @@ import {
   IonDatetime,
   IonDatetimeButton,
   IonFooter,
-  IonSegment,
-  IonSegmentButton,
 } from '@ionic/angular/standalone';
 import { AddModelComponent } from '../add-model/add-model.component';
 import { ExportModalComponent } from '../export-model/export-modal.component';
@@ -64,7 +62,9 @@ import {
   formatExportDuration,
   formatExportPause,
   formatExportTime,
+  parseClock,
 } from 'src/app/utils/export-format';
+import { LanguageService } from 'src/app/services/language.service';
 
 pdfMake.vfs = pdfFonts as any;
 
@@ -96,8 +96,6 @@ pdfMake.vfs = pdfFonts as any;
     RouterModule,
     AutocompleteComponent,
     TranslatePipe,
-    IonSegment,
-    IonSegmentButton,
   ],
 })
 export class DetailPage implements OnInit {
@@ -109,10 +107,20 @@ export class DetailPage implements OnInit {
   private customerService = inject(CustomerService);
   private employeeService = inject(EmployeeService);
   private fb = inject(FormBuilder);
+  private languageService = inject(LanguageService);
+  private translate = inject(TranslateService);
 
   public logoBase64: string = '';
   public minDate = '2000-01-01';
   public maxDate = '';
+
+  get locale(): string {
+    return this.languageService.locale;
+  }
+
+  private hoursAbbr(): string {
+    return this.translate.instant('HOURS_ABBR');
+  }
 
   jobId?: string;
   job?: Job;
@@ -149,9 +157,13 @@ export class DetailPage implements OnInit {
         for (let i = 0; i < this.job.entries.length - 1; i++) {
           this.addEmployee();
         }
-        this.jobForm!.patchValue(this.job);
+        this.jobForm!.patchValue(this.normalizeJobForForm(this.job));
+        this.entries.controls.forEach((entry) => {
+          this.updateEmployeeDuration(entry as FormGroup);
+          this.calculateSurcharge(entry);
+        });
       } else {
-        this.utilsService.showToast('JOB_NOT_FOUND');
+        this.utilsService.showToast('JOB_NOT_FOUND', 'error');
         this.navCtrl.back();
       }
     }
@@ -173,6 +185,76 @@ export class DetailPage implements OnInit {
     this.toBase64(EXPORT_LOGO);
   }
 
+  /** API may store "22:00" / "2026-03-08" — datetime inputs need local ISO. */
+  private normalizeJobForForm(job: Job) {
+    const entries = (job.entries || []).map((entry) => ({
+      ...entry,
+      date: this.toDateTimeLocal(entry.date),
+      start: this.toDateTimeLocal(entry.start, entry.date),
+      end: this.toDateTimeLocal(entry.end, entry.date),
+      pause: this.toDateTimeLocal(entry.pause, '1970-01-01'),
+    }));
+    return {
+      ...job,
+      nightShiftTime: this.toDateTimeLocal(job.nightShiftTime, entries[0]?.date),
+      employeeDate: this.toDateTimeLocal(job.employeeDate),
+      employerDate: this.toDateTimeLocal(job.employerDate),
+      entries,
+    };
+  }
+
+  private toDateTimeLocal(
+    value: string | Date | null | undefined,
+    dateHint?: string | Date | null,
+  ): string {
+    if (value == null || value === '') {
+      return dateHint
+        ? this.toDateTimeLocal(dateHint)
+        : this.getCurrentLocalString();
+    }
+    if (value instanceof Date && !Number.isNaN(value.getTime())) {
+      return this.formatLocalIso(value);
+    }
+
+    const s = String(value).trim();
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) {
+      return s.slice(0, 16);
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      return `${s}T00:00`;
+    }
+
+    const clock = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/.exec(s);
+    if (clock) {
+      const hint = dateHint ? String(dateHint).trim() : '';
+      const datePart = /^\d{4}-\d{2}-\d{2}/.test(hint)
+        ? hint.slice(0, 10)
+        : '1970-01-01';
+      const [y, m, d] = datePart.split('-').map(Number);
+      const local = new Date(
+        y,
+        m - 1,
+        d,
+        Number(clock[1]),
+        Number(clock[2]),
+        Number(clock[3] || 0),
+        0,
+      );
+      return this.formatLocalIso(local);
+    }
+
+    const parsed = new Date(s);
+    if (!Number.isNaN(parsed.getTime())) {
+      return this.formatLocalIso(parsed);
+    }
+    return this.getCurrentLocalString();
+  }
+
+  private formatLocalIso(d: Date): string {
+    const tzOffset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+  }
+
   createForm() {
     const employeeForm = this.createEmployeeFormGroup();
     this.updateEmployeeDuration(employeeForm);
@@ -184,7 +266,7 @@ export class DetailPage implements OnInit {
         this.getCurrentLocalString(22, 0),
         [Validators.required],
       ],
-      invoiceNumber: [null, [Validators.required, Validators.min(0)]],
+      invoiceNumber: [''],
       hourlyRate: [null, [Validators.required, Validators.min(0)]],
       comment: [''],
       entries: this.fb.array([employeeForm]),
@@ -244,7 +326,7 @@ export class DetailPage implements OnInit {
         start: [this.getCurrentLocalString(8, 0), [Validators.required]],
         end: [this.getCurrentLocalString(17, 0), [Validators.required]],
         pause: ['1970-01-01T00:00:00', [Validators.required]],
-        duration: ['0:00 Std.'],
+        duration: [`0:00 ${this.hoursAbbr()}`],
         workHours: [0],
         nightHours: [0],
         amount: [0],
@@ -280,20 +362,36 @@ export class DetailPage implements OnInit {
 
   private updateEmployeeDuration(employeeGroup: FormGroup): void {
     const { start, end, pause } = employeeGroup.getRawValue();
-    if (!start || !end || !pause) return;
+    const durationControl = employeeGroup.get('duration');
+    const workHoursControl = employeeGroup.get('workHours');
+
+    const startDate = parseClock(start) ?? new Date(start);
+    const endDate = parseClock(end) ?? new Date(end);
+    const pauseDate = parseClock(pause) ?? new Date(pause);
+
+    if (
+      !start ||
+      !end ||
+      !pause ||
+      Number.isNaN(startDate.getTime()) ||
+      Number.isNaN(endDate.getTime()) ||
+      Number.isNaN(pauseDate.getTime())
+    ) {
+      durationControl?.setValue(`0:00 ${this.hoursAbbr()}`, { emitEvent: false });
+      workHoursControl?.setValue(0, { emitEvent: false });
+      return;
+    }
 
     const { netWorkHours, nightHours } = this.calculateShiftDuration(
-      new Date(start),
-      new Date(end),
-      new Date(pause),
+      startDate,
+      endDate,
+      pauseDate,
     );
 
     employeeGroup.get('nightHours')?.setValue(nightHours, { emitEvent: false });
 
-    const durationControl = employeeGroup.get('duration');
-    const workHoursControl = employeeGroup.get('workHours');
-    if (netWorkHours <= 0) {
-      durationControl?.setValue('0:00 Std.', { emitEvent: false });
+    if (!Number.isFinite(netWorkHours) || netWorkHours <= 0) {
+      durationControl?.setValue(`0:00 ${this.hoursAbbr()}`, { emitEvent: false });
       workHoursControl?.setValue(0, { emitEvent: false });
       return;
     }
@@ -301,7 +399,7 @@ export class DetailPage implements OnInit {
     const hours = Math.floor(netWorkHours);
     const minutes = Math.round((netWorkHours - hours) * 60);
 
-    const duration = `${hours}:${String(minutes).padStart(2, '0')} Std.`;
+    const duration = `${hours}:${String(minutes).padStart(2, '0')} ${this.hoursAbbr()}`;
     durationControl?.setValue(duration, { emitEvent: false });
     workHoursControl?.setValue(netWorkHours, { emitEvent: false });
   }
@@ -317,6 +415,18 @@ export class DetailPage implements OnInit {
   }
 
   private calculateShiftDuration(start: Date, end: Date, pause: Date) {
+    start = new Date(start.getTime());
+    end = new Date(end.getTime());
+    pause = new Date(pause.getTime());
+
+    if (
+      Number.isNaN(start.getTime()) ||
+      Number.isNaN(end.getTime()) ||
+      Number.isNaN(pause.getTime())
+    ) {
+      return { netWorkHours: 0, nightHours: 0, shiftDuration: 0 };
+    }
+
     if (end.getTime() <= start.getTime()) {
       end.setDate(end.getDate() + 1);
     }
@@ -337,9 +447,12 @@ export class DetailPage implements OnInit {
       let minute = 0;
 
       if (nightShiftStartTime) {
-        const nightShiftStart = new Date(nightShiftStartTime);
-        hour = nightShiftStart.getHours();
-        minute = nightShiftStart.getMinutes();
+        const nightShiftStart =
+          parseClock(nightShiftStartTime) ?? new Date(nightShiftStartTime);
+        if (!Number.isNaN(nightShiftStart.getTime())) {
+          hour = nightShiftStart.getHours();
+          minute = nightShiftStart.getMinutes();
+        }
       }
 
       const ns = new Date(date);
@@ -507,10 +620,21 @@ export class DetailPage implements OnInit {
 
     if (!start || !end || !pause) return null;
 
+    const startDate = parseClock(start) ?? new Date(start);
+    const endDate = parseClock(end) ?? new Date(end);
+    const pauseDate = parseClock(pause) ?? new Date(pause);
+    if (
+      Number.isNaN(startDate.getTime()) ||
+      Number.isNaN(endDate.getTime()) ||
+      Number.isNaN(pauseDate.getTime())
+    ) {
+      return { timeInvalid: true };
+    }
+
     const { netWorkHours, shiftDuration } = this.calculateShiftDuration(
-      new Date(start),
-      new Date(end),
-      new Date(pause),
+      startDate,
+      endDate,
+      pauseDate,
     );
 
     return netWorkHours > 0 && shiftDuration > 0 ? null : { timeInvalid: true };
@@ -521,8 +645,7 @@ export class DetailPage implements OnInit {
       component: AddModelComponent,
       componentProps: { isEmployee: false },
       backdropDismiss: true,
-      breakpoints: [0, 0.3, 0.5, 1],
-      cssClass: ['addModal'],
+      cssClass: ['hf-dialog', 'hf-dialog--md'],
     });
 
     modal.onDidDismiss().then(async (result) => {
@@ -549,8 +672,7 @@ export class DetailPage implements OnInit {
       component: SignModelComponent,
       componentProps: { type: type, sign: sign },
       backdropDismiss: true,
-      breakpoints: [0, 0.3, 0.5, 1],
-      cssClass: ['signModal'],
+      cssClass: ['hf-dialog', 'hf-dialog--lg'],
     });
     modal.onDidDismiss().then((result) => {
       if (result.data && result.data.sign) {
@@ -606,7 +728,7 @@ export class DetailPage implements OnInit {
   }
 
   async exportJobPDF() {
-    const job = this.jobForm!.value;
+    const job = this.jobForm!.getRawValue();
 
     if (!this.logoBase64 || this.logoBase64 === '') {
       await this.toBase64(EXPORT_LOGO);
@@ -964,7 +1086,7 @@ export class DetailPage implements OnInit {
   }
 
   async exportJobExcel() {
-    const job = this.jobForm!.value;
+    const job = this.jobForm!.getRawValue();
     const wb = XLSX.utils.book_new();
     const data: any[][] = [];
 
@@ -1266,7 +1388,7 @@ export class DetailPage implements OnInit {
 
     const modal = await this.modalCtrl.create({
       component: ExportModalComponent,
-      cssClass: 'exportModel',
+      cssClass: ['hf-dialog', 'hf-dialog--export'],
     });
 
     await modal.present();

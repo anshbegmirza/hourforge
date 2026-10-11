@@ -70,8 +70,11 @@ export function formatExportWeekday(value: string | Date | null | undefined): st
 
 export function formatExportDuration(duration: string | null | undefined): string {
   if (!duration) return '0h 0m';
-  const [h = '0', m = '0'] = String(duration).split(':');
-  return `${Number.parseInt(h, 10) || 0}h ${Number.parseInt(m, 10) || 0}m`;
+  const cleaned = String(duration).replace(/[^\d:.]/g, '');
+  const [h = '0', m = '0'] = cleaned.split(':');
+  const hours = Number.parseInt(h, 10);
+  const minutes = Number.parseInt(m, 10);
+  return `${Number.isFinite(hours) ? hours : 0}h ${Number.isFinite(minutes) ? minutes : 0}m`;
 }
 
 /** "März 2026" / "mars 2026" → "March 2026" for English filenames. */

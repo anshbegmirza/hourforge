@@ -1,20 +1,19 @@
-ion-header.header{
+ion-header.header {
   box-shadow: none;
   --padding: 0 !important;
-  padding: 0  !important;
+  padding: 0 !important;
   padding-top: 12px;
-
 }
 
 ion-toolbar.header-toolbar {
   --background: transparent;
   box-shadow: none;
 }
-.title{
+
+.title {
   font-size: 16px;
   font-weight: 700;
 }
-
 
 ion-content .page-wrapper {
   --padding-top: 24px;
@@ -24,27 +23,12 @@ ion-content .page-wrapper {
 }
 
 .modal-content {
-
   .action-buttons {
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
     gap: 10px;
   }
-
-}
-
-.close-icon{
-  font-size: 28px;
-}
-
-.btn-primary {
-  --padding-start: 12px;
-  --padding-end: 12px;
-  --padding-top: 6px;
-  --padding-bottom: 6px;
-  --border-radius: 20px;
-  text-transform: none;
 }
 
 .sign-canvas {
@@ -52,16 +36,7 @@ ion-content .page-wrapper {
   aspect-ratio: auto;
   width: 100%;
   height: calc(100% - 73px);
-  border-radius: 20px;
-}
-
-::ng-deep ion-modal.signModal::part(content){
-  height: 90% !important;
-  width: 80%;
-  border-radius: 20px;
-  max-height: 420px;
-}
-
-::ng-deep ion-modal.signModal::part(backdrop) {
-  opacity: 0.7;
+  border-radius: var(--hourforge-radius);
+  border: 1px solid var(--hourforge-border);
+  box-shadow: var(--hourforge-shadow);
 }

@@ -8,6 +8,10 @@ const {
   publicJobEntry,
   publicJob,
 } = require('../../utils/publicModels');
+const {
+  nextInvoiceNumber,
+  yearToken,
+} = require('../../utils/invoiceNumber');
 
 const router = express.Router();
 router.use(requireAuth);
@@ -163,6 +167,15 @@ router.post('/', async (req, res, next) => {
     );
     const jobNumber = Number(body.jobNumber) || Number(maxRows[0].max_num) + 1;
 
+    const yy = yearToken();
+    const [invRows] = await conn.query(
+      'SELECT invoice_number FROM jobs WHERE user_id = ? AND invoice_number LIKE ?',
+      [req.user.id, `IV${yy}-%`]
+    );
+    const invoiceNumber = nextInvoiceNumber(
+      invRows.map((row) => row.invoice_number),
+    );
+
     const [result] = await conn.query(
       `INSERT INTO jobs
         (user_id, customer_id, job_number, night_shift_time, invoice_number, hourly_rate,
@@ -173,7 +186,7 @@ router.post('/', async (req, res, next) => {
         customerId,
         jobNumber,
         String(body.nightShiftTime || ''),
-        Number(body.invoiceNumber) || 0,
+        invoiceNumber,
         Number(body.hourlyRate) || 0,
         String(body.comment || ''),
         String(body.totalTime || ''),
@@ -228,9 +241,10 @@ router.put('/:id', async (req, res, next) => {
       }
     }
 
+    // invoice_number is assigned on create and is read-only afterward
     await conn.query(
       `UPDATE jobs SET
-        customer_id = ?, job_number = ?, night_shift_time = ?, invoice_number = ?, hourly_rate = ?,
+        customer_id = ?, job_number = ?, night_shift_time = ?, hourly_rate = ?,
         comment = ?, total_time = ?, employee_date = ?, employee_signature = ?,
         employer_date = ?, employer_signature = ?
        WHERE id = ? AND user_id = ?`,
@@ -238,7 +252,6 @@ router.put('/:id', async (req, res, next) => {
         customerId,
         Number(body.jobNumber) || 0,
         String(body.nightShiftTime || ''),
-        Number(body.invoiceNumber) || 0,
         Number(body.hourlyRate) || 0,
         String(body.comment || ''),
         String(body.totalTime || ''),

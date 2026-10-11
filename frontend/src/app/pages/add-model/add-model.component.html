@@ -1,4 +1,4 @@
-<ion-header class="ion-padding header">
+<ion-header class="header">
   <ion-toolbar class="header-toolbar">
     <ion-title class="title">
       {{
@@ -8,16 +8,21 @@
       }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" fill="clear">
-        <ion-icon name="close-outline" class="close-icon"></ion-icon>
+      <ion-button
+        (click)="closeModal()"
+        fill="clear"
+        [attr.aria-label]="'ARIA_CLOSE' | translate"
+      >
+        <ion-icon name="close-outline" class="hf-dialog-close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding page-wrapper modal-content">
+<ion-content class="ion-padding modal-content">
   @if (isEmployee && employeeForm) {
     <form [formGroup]="employeeForm">
+      <ion-label class="section-label">{{ 'EMPLOYEE_NAME' | translate }}</ion-label>
       <ion-item
         class="rounded-input truncate-input"
         lines="none"
@@ -26,10 +31,15 @@
           employeeForm.controls['name'].invalid
         "
       >
-        <ion-input type="text" formControlName="name"></ion-input>
+        <ion-input
+          type="text"
+          formControlName="name"
+          [placeholder]="'EMPLOYEE_NAME' | translate"
+        ></ion-input>
       </ion-item>
     </form>
   }
+
   @if (!isEmployee && customerForm) {
     <form [formGroup]="customerForm" class="address-form">
       <ion-label class="section-label">{{
@@ -46,122 +56,126 @@
         <ion-input type="text" formControlName="companyName"></ion-input>
       </ion-item>
       @if (
-            customerForm.controls['companyName'].touched &&
-            customerForm.controls['companyName'].invalid
-          ) {
-            <span class="validation-text"
-              >*{{ 'COMPANY_NAME_VALIDATION' | translate }}</span
+        customerForm.controls['companyName'].touched &&
+        customerForm.controls['companyName'].invalid
+      ) {
+        <ion-note color="danger" class="validation-text"
+          >*{{ 'COMPANY_NAME_VALIDATION' | translate }}</ion-note
+        >
+      }
+
+      <ion-grid class="ion-no-padding form-grid">
+        <ion-row>
+          <ion-col size="8">
+            <ion-label class="section-label">{{
+              'STREET' | translate
+            }}</ion-label>
+            <ion-item
+              class="rounded-input"
+              lines="none"
+              [class.invalid-input]="
+                customerForm.controls['street'].touched &&
+                customerForm.controls['street'].invalid
+              "
             >
-          }
-      <div class="form-row">
-        <div class="street">
-          <ion-label class="section-label">{{
-            'STREET' | translate
-          }}</ion-label>
-          <ion-item
-            class="rounded-input"
-            lines="none"
-            [class.invalid-input]="
+              <ion-input type="text" formControlName="street"></ion-input>
+            </ion-item>
+            @if (
               customerForm.controls['street'].touched &&
               customerForm.controls['street'].invalid
-            "
-          >
-            <ion-input type="text" formControlName="street"></ion-input>
-          </ion-item>
-           @if (
-            customerForm.controls['street'].touched &&
-            customerForm.controls['street'].invalid
-          ) {
-            <span class="validation-text"
-              >*{{ 'STREET_VALIDATION' | translate }}</span
+            ) {
+              <ion-note color="danger" class="validation-text"
+                >*{{ 'STREET_VALIDATION' | translate }}</ion-note
+              >
+            }
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="section-label">{{
+              'HOUSE_NUMBER' | translate
+            }}</ion-label>
+            <ion-item
+              class="rounded-input"
+              lines="none"
+              [class.invalid-input]="
+                customerForm.controls['houseNumber'].touched &&
+                customerForm.controls['houseNumber'].invalid
+              "
             >
-          }
-        </div>
-
-        <div class="house-number">
-          <ion-label class="section-label">{{
-            'HOUSE_NUMBER' | translate
-          }}</ion-label>
-          <ion-item
-            class="rounded-input number-input"
-            lines="none"
-            [class.invalid-input]="
+              <ion-input type="text" formControlName="houseNumber"></ion-input>
+            </ion-item>
+            @if (
               customerForm.controls['houseNumber'].touched &&
               customerForm.controls['houseNumber'].invalid
-            "
-          >
-            <ion-input type="text" formControlName="houseNumber"></ion-input>
-          </ion-item>
-          @if (
-            customerForm.controls['houseNumber'].touched &&
-            customerForm.controls['houseNumber'].invalid
-          ) {
-            <span class="validation-text"
-              >*{{ 'HOUSE_NUMBER_VALIDATION' | translate }}</span
-            >
-          }
-        </div>
-      </div>
+            ) {
+              <ion-note color="danger" class="validation-text"
+                >*{{ 'HOUSE_NUMBER_VALIDATION' | translate }}</ion-note
+              >
+            }
+          </ion-col>
+        </ion-row>
 
-      <div class="form-row row-postal-city">
-        <div class="postal-code">
-          <ion-label class="section-label">{{
-            'POSTAL_CODE' | translate
-          }}</ion-label>
-          <ion-item
-            class="rounded-input number-input"
-            lines="none"
-            [class.invalid-input]="
+        <ion-row>
+          <ion-col size="4">
+            <ion-label class="section-label">{{
+              'POSTAL_CODE' | translate
+            }}</ion-label>
+            <ion-item
+              class="rounded-input"
+              lines="none"
+              [class.invalid-input]="
+                customerForm.controls['postalCode'].touched &&
+                customerForm.controls['postalCode'].invalid
+              "
+            >
+              <ion-input
+                type="number"
+                formControlName="postalCode"
+                maxlength="5"
+                pattern="[0-9]*"
+                inputmode="numeric"
+              ></ion-input>
+            </ion-item>
+            @if (
               customerForm.controls['postalCode'].touched &&
               customerForm.controls['postalCode'].invalid
-            "
-          >
-            <ion-input type="number" formControlName="postalCode" maxlength="5" pattern="[0-9]*" inputmode="numeric"></ion-input>
-          </ion-item>
-          @if (
-            customerForm.controls['postalCode'].touched &&
-            customerForm.controls['postalCode'].invalid
-          ) {
-            <span class="validation-text"
-              >*{{ 'POSTAL_CODE_VALIDATION' | translate }}</span
+            ) {
+              <ion-note color="danger" class="validation-text"
+                >*{{ 'POSTAL_CODE_VALIDATION' | translate }}</ion-note
+              >
+            }
+          </ion-col>
+          <ion-col size="8">
+            <ion-label class="section-label">{{ 'CITY' | translate }}</ion-label>
+            <ion-item
+              class="rounded-input"
+              lines="none"
+              [class.invalid-input]="
+                customerForm.controls['city'].touched &&
+                customerForm.controls['city'].invalid
+              "
             >
-          }
-        </div>
-
-        <div class="city">
-          <ion-label class="section-label">{{ 'CITY' | translate }}</ion-label>
-          <ion-item
-            class="rounded-input number-input"
-            lines="none"
-            [class.invalid-input]="
+              <ion-input type="text" formControlName="city"></ion-input>
+            </ion-item>
+            @if (
               customerForm.controls['city'].touched &&
               customerForm.controls['city'].invalid
-            "
-          >
-            <ion-input type="text" formControlName="city"></ion-input>
-          </ion-item>
-          @if (
-            customerForm.controls['city'].touched &&
-            customerForm.controls['city'].invalid
-          ) {
-            <span class="validation-text"
-              >*{{ 'CITY_VALIDATION' | translate }}</span
-            >
-          }
-        </div>
-      </div>
+            ) {
+              <ion-note color="danger" class="validation-text"
+                >*{{ 'CITY_VALIDATION' | translate }}</ion-note
+              >
+            }
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </form>
   }
 
-  <div class="action-buttons">
-    <ion-button
-      expand="block"
-      slot="end"
-      color="primary"
-      class="btn-primary"
-      (click)="sendData()"
-    >
-      {{ isEmployee ? ('SAVE' | translate) : ('SAVE_ADDRESS' | translate) }}
-    </ion-button>
-  </div>
+  <ion-button
+    expand="block"
+    color="primary"
+    class="hf-dialog-btn save-btn"
+    (click)="sendData()"
+  >
+    {{ isEmployee ? ('SAVE' | translate) : ('SAVE_ADDRESS' | translate) }}
+  </ion-button>
 </ion-content>

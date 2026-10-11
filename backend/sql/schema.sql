@@ -52,7 +52,7 @@ CREATE TABLE jobs (
   customer_id BIGINT UNSIGNED NULL,
   job_number INT NOT NULL DEFAULT 1,
   night_shift_time VARCHAR(32) NOT NULL DEFAULT '',
-  invoice_number INT NOT NULL DEFAULT 0,
+  invoice_number VARCHAR(16) NOT NULL DEFAULT '',
   hourly_rate DECIMAL(10, 2) NOT NULL DEFAULT 0,
   comment TEXT NULL,
   total_time VARCHAR(32) NOT NULL DEFAULT '',

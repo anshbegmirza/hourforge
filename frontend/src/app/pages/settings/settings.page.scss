@@ -1,6 +1,5 @@
 .header {
   box-shadow: none;
-  --ion-background-color: #e2e2e2;
 }
 
 .header-end {
@@ -10,15 +9,17 @@
 }
 
 ion-content.page-wrapper {
-  --padding-top: 24px;
-  --padding-bottom: 24px;
-  --padding-start: 24px;
-  --padding-end: 24px;
+  --padding-top: 20px;
+  --padding-bottom: 28px;
+  --padding-start: 20px;
+  --padding-end: 20px;
 }
 
 .title {
-  margin-bottom: 20px;
-  font-weight: 600;
+  margin-bottom: 18px;
+  font-weight: 700;
+  color: var(--hourforge-text);
+  letter-spacing: -0.02em;
 }
 
 .section-toolbar {
@@ -36,7 +37,8 @@ ion-content.page-wrapper {
   h6 {
     margin: 0;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--hourforge-text);
   }
 }
 
@@ -44,19 +46,62 @@ ion-list {
   background: transparent !important;
 }
 
+.theme-seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 18px;
+  border-radius: var(--hourforge-radius);
+  background: var(--hourforge-glass-strong);
+  box-shadow: var(--hourforge-shadow);
+
+  &__btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: calc(var(--hourforge-radius) - 4px);
+    padding: 10px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hourforge-text-muted);
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    ion-icon {
+      font-size: 16px;
+    }
+
+    &--active {
+      color: #fff;
+      background: var(--ion-color-primary);
+    }
+  }
+}
+
 .rounded-item {
-  --ion-item-background: transparent;
+  --ion-item-background: var(--hourforge-glass-strong);
+  --background: var(--hourforge-glass-strong);
+  --color: var(--hourforge-text);
   --min-height: max-content;
   --padding-start: 25px;
   --padding-end: 0px;
-  border-radius: 12px;
-  border: 2px solid #e2e2e2;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  --border-width: 0;
+  border: none;
+  border-radius: var(--hourforge-radius);
+  box-shadow: var(--hourforge-shadow);
   padding: 20px 0;
   margin-bottom: 18px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .item-content {
@@ -108,7 +153,9 @@ ion-list {
   &-container {
     display: flex;
     justify-content: flex-end;
-    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
   }
 
   &-trash-icon {
@@ -118,16 +165,26 @@ ion-list {
 }
 
 .btn-primary {
-  --padding-start: 12px;
-  --padding-end: 12px;
-  --padding-top: 4px;
-  --padding-bottom: 4px;
-  --border-radius: 20px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --border-radius: 999px;
   text-transform: none;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
+.empty-inline {
+  padding: 1.25rem 1rem;
+  margin-bottom: 12px;
+  background: var(--hourforge-glass);
+  border: 1px solid var(--hourforge-border);
+  border-radius: var(--hourforge-radius);
+  box-shadow: var(--hourforge-shadow);
+}
 
 .version {
   font-size: 0.8rem;
+  color: var(--hourforge-text-muted);
 }

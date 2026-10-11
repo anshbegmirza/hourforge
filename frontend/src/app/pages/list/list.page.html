@@ -1,6 +1,12 @@
 <ion-header [translucent]="true" class="header">
   <ion-toolbar>
-    <div slot="start" class="header-start"></div>
+    <div slot="start" class="header-start">
+      <img
+        class="hf-brand-mark"
+        src="assets/icon/PNG/Hourforge-App-Icon.png"
+        alt="Hourforge"
+      />
+    </div>
     <ion-title class="ion-text-center"
       >{{"APP_TITLE" | translate}}</ion-title
     >
@@ -10,6 +16,8 @@
         shape="round"
         size="small"
         class="settings-icon"
+        color="primary"
+        [attr.aria-label]="'ARIA_SETTINGS' | translate"
       >
         <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
       </ion-button>
@@ -25,37 +33,38 @@
         show-clear-button="focus"
         [(ngModel)]="searchQuery"
         (ionInput)="onSearch()"
-        placeholder=""
-        color="translucent"
+        [placeholder]="'SEARCH_ORDERS' | translate"
+        [attr.aria-label]="'SEARCH_ORDERS' | translate"
       >
       </ion-searchbar>
     </div>
     <ion-button
       routerLink="job"
-      fill="clear"
-      color="dark"
+      fill="solid"
+      color="primary"
       shape="round"
-      class="custom-btn"
+      class="add-btn"
+      [attr.aria-label]="'ARIA_ADD_ORDER' | translate"
     >
-      <ion-icon slot="icon-only" name="add-circle" class="add-icon"></ion-icon>
+      <ion-icon slot="icon-only" name="add" class="add-icon"></ion-icon>
     </ion-button>
   </div>
   @if(jobs.length>0){
-  <div class="custom-container">
+  <div class="custom-container hf-glass">
     <ion-list lines="none">
       @for (month of jobsByMonth|keyvalue:null; track month.key) {
       <ion-item-group>
-        <ion-item>
+        <ion-item class="month-row">
           <ion-label class="sub-title"> {{month.key}} </ion-label>
           <ion-button
-            fill="outline"
+            fill="solid"
             shape="round"
-            color="dark"
-            class="btn-primary custom-btn"
+            color="primary"
+            class="btn-primary"
             (click)="openExportModal(month.value, month.key)"
           >
             <ion-icon
-              slot="icon-only"
+              slot="start"
               name="open-outline"
               class="export-icon"
             ></ion-icon>
@@ -76,7 +85,7 @@
           detailIcon="chevron-forward-outline"
         >
           <ion-label class="sub-header">
-             <h2>{{ job.entries[0].date | date:'dd MMMM' }}, {{job.entries[0].workHours}} Std. Auftrag #{{ job.jobNumber }}</h2>
+             <h2>{{ job.entries[0].date | date:'dd MMMM':undefined:locale }}, {{job.entries[0].workHours}} {{ 'HOURS_ABBR' | translate }} {{ 'ORDER' | translate }} #{{ job.jobNumber }}</h2>
             <p>
               <span>{{ job.customer.companyName }}</span>
               @for (entry of job.entries; track $index) {
@@ -93,6 +102,11 @@
       </ion-item>
       }
     </ion-list>
+  </div>
+  } @else {
+  <div class="hf-empty hf-glass">
+    <p>{{ 'NO_JOBS_YET' | translate }}</p>
+    <span>{{ 'NO_JOBS_HINT' | translate }}</span>
   </div>
   }
 </ion-content>

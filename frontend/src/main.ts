@@ -22,6 +22,7 @@ import localeFr from '@angular/common/locales/fr';
 import localeEn from '@angular/common/locales/en';
 import { authInterceptor } from './app/interceptors/auth.interceptor';
 import { LanguageService } from './app/services/language.service';
+import { ThemeService } from './app/services/theme.service';
 
 registerLocaleData(localeDe, 'de');
 registerLocaleData(localeFr, 'fr');
@@ -47,6 +48,7 @@ bootstrapApplication(AppComponent, {
     }),
     provideAppInitializer(() => {
       inject(LanguageService).init();
+      inject(ThemeService).init();
     }),
     { provide: LOCALE_ID, useValue: 'en' },
   ],

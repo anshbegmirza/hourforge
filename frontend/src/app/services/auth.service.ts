@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular/standalone';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CustomerService } from './customer.service';
@@ -19,6 +20,7 @@ export interface AuthUser {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private navCtrl = inject(NavController);
   private customerService = inject(CustomerService);
   private employeeService = inject(EmployeeService);
   private jobService = inject(JobService);
@@ -107,7 +109,8 @@ export class AuthService {
     this.customerService.clearLocal();
     this.employeeService.clearLocal();
     this.jobService.clearLocal();
-    this.router.navigateByUrl('/login');
+    // navigateRoot clears the Ionic nav stack so Settings doesn't linger under Login
+    void this.navCtrl.navigateRoot('/login');
   }
 
   private async setSession(token: string, user: AuthUser) {

@@ -1,11 +1,202 @@
-// Hourforge brand — blue primary (aligned to HF logo tile)
+// Hourforge — Material-inspired brand + glass tokens
 :root {
-  --ion-color-primary: #2563eb;
-  --ion-color-primary-rgb: 37, 99, 235;
+  --ion-color-primary: #2cb4eb;
+  --ion-color-primary-rgb: 44, 180, 235;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #2057cf;
-  --ion-color-primary-tint: #3b73ed;
+  --ion-color-primary-shade: #259ecf;
+  --ion-color-primary-tint: #41bced;
 
-  --hourforge-blue: #2563eb;
+  --ion-color-secondary: #25aee8;
+  --ion-color-secondary-rgb: 37, 174, 232;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #2099cc;
+  --ion-color-secondary-tint: #3bb6ea;
+
+  --ion-color-tertiary: #0b5cad;
+  --ion-color-tertiary-rgb: 11, 92, 173;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #0a5198;
+  --ion-color-tertiary-tint: #236cb5;
+
+  --ion-color-dark: #0f172a;
+  --ion-color-dark-rgb: 15, 23, 42;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #0d1425;
+  --ion-color-dark-tint: #272e3f;
+
+  --ion-color-medium: #64748b;
+  --ion-color-medium-rgb: 100, 116, 139;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #58667a;
+  --ion-color-medium-tint: #748297;
+
+  --ion-color-light: #e8f1f8;
+  --ion-color-light-rgb: 232, 241, 248;
+  --ion-color-light-contrast: #0f172a;
+  --ion-color-light-contrast-rgb: 15, 23, 42;
+  --ion-color-light-shade: #ccd4db;
+  --ion-color-light-tint: #eaf2f9;
+
+  --ion-color-success: #22a06b;
+  --ion-color-success-rgb: 34, 160, 107;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #1e8d5e;
+  --ion-color-success-tint: #38aa7a;
+
+  --ion-color-warning: #e6a23c;
+  --ion-color-warning-rgb: 230, 162, 60;
+  --ion-color-warning-contrast: #1a1a1a;
+  --ion-color-warning-contrast-rgb: 26, 26, 26;
+  --ion-color-warning-shade: #ca8f35;
+  --ion-color-warning-tint: #e9ab50;
+
+  --ion-color-danger: #e5484d;
+  --ion-color-danger-rgb: 229, 72, 77;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #ca3f44;
+  --ion-color-danger-tint: #e85a5f;
+
+  --hourforge-blue: #2cb4eb;
+  --hourforge-blue-alt: #25aee8;
+  --hourforge-blue-deep: #0b5cad;
+  --hourforge-blue-deeper: #0a4f9c;
+  --hourforge-surface: #f4f8fc;
+  --hourforge-text: #0f172a;
+  --hourforge-text-muted: #475569;
+  --hourforge-border: rgba(15, 23, 42, 0.12);
+  --hourforge-border-strong: rgba(15, 23, 42, 0.22);
+
+  --hourforge-radius: 20px;
+  --hourforge-radius-sm: 14px;
+  --hourforge-radius-lg: 24px;
+  --hourforge-blur: 18px;
+  --hourforge-shadow: 0 4px 20px rgba(11, 92, 173, 0.08);
+  --hourforge-shadow-lg: 0 10px 36px rgba(11, 92, 173, 0.12);
+
+  // Readable glass (not too clear — keeps text contrast)
+  --hourforge-glass: rgba(255, 255, 255, 0.86);
+  --hourforge-glass-strong: rgba(255, 255, 255, 0.94);
+  --hourforge-glass-tint: rgba(255, 255, 255, 0.72);
+  --hourforge-header-bg: rgba(244, 248, 252, 0.82);
+  --hourforge-page-wash: linear-gradient(
+    165deg,
+    #f4f8fc 0%,
+    #e8f2fa 42%,
+    #d9eaf7 100%
+  );
+
+  --ion-background-color: #f4f8fc;
+  --ion-background-color-rgb: 244, 248, 252;
+  --ion-text-color: #0f172a;
+  --ion-text-color-rgb: 15, 23, 42;
+
+  --ion-toolbar-background: var(--hourforge-header-bg);
+  --ion-toolbar-color: var(--hourforge-text);
+  --ion-toolbar-border-color: transparent;
+
+  --ion-item-background: transparent;
+  --ion-card-background: var(--hourforge-glass);
+  --ion-border-color: var(--hourforge-border);
+
+  --ion-color-step-50: #eef4f9;
+  --ion-color-step-100: #e4edf5;
+  --ion-color-step-150: #d9e6f0;
+  --ion-color-step-200: #cedfe9;
+  --ion-color-step-250: #c3d8e3;
+  --ion-color-step-300: #b8d1dc;
+  --ion-color-step-350: #adcad6;
+  --ion-color-step-400: #a2c3cf;
+  --ion-color-step-450: #97bcc9;
+  --ion-color-step-500: #8cb5c2;
+  --ion-color-step-550: #7a9eac;
+  --ion-color-step-600: #688796;
+  --ion-color-step-650: #567080;
+  --ion-color-step-700: #44596a;
+  --ion-color-step-750: #334254;
+  --ion-color-step-800: #212b3e;
+  --ion-color-step-850: #1a2435;
+  --ion-color-step-900: #141d2c;
+  --ion-color-step-950: #0f172a;
+}
+
+/* Class toggled by ThemeService (auto / light / dark) */
+html.ion-palette-dark {
+    --hourforge-surface: #0c1829;
+    --hourforge-text: #f1f5f9;
+    --hourforge-text-muted: #94a3b8;
+    --hourforge-border: rgba(255, 255, 255, 0.12);
+    --hourforge-border-strong: rgba(255, 255, 255, 0.22);
+    --hourforge-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    --hourforge-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+    --hourforge-glass: rgba(14, 32, 56, 0.88);
+    --hourforge-glass-strong: rgba(16, 38, 66, 0.94);
+    --hourforge-glass-tint: rgba(30, 58, 95, 0.65);
+    --hourforge-header-bg: rgba(12, 24, 41, 0.78);
+    --hourforge-page-wash: linear-gradient(
+      165deg,
+      #0a1524 0%,
+      #0e2138 48%,
+      #0a2f5c 100%
+    );
+
+    --ion-background-color: #0c1829;
+    --ion-background-color-rgb: 12, 24, 41;
+    --ion-text-color: #f1f5f9;
+    --ion-text-color-rgb: 241, 245, 249;
+
+    --ion-toolbar-background: var(--hourforge-header-bg);
+    --ion-toolbar-color: #f1f5f9;
+
+    --ion-card-background: var(--hourforge-glass);
+    --ion-item-background: transparent;
+    --ion-border-color: var(--hourforge-border);
+
+    --ion-color-dark: #e2e8f0;
+    --ion-color-dark-rgb: 226, 232, 240;
+    --ion-color-dark-contrast: #0f172a;
+    --ion-color-dark-contrast-rgb: 15, 23, 42;
+    --ion-color-dark-shade: #c7ccd2;
+    --ion-color-dark-tint: #e5eaf2;
+
+    --ion-color-medium: #94a3b8;
+    --ion-color-medium-rgb: 148, 163, 184;
+    --ion-color-medium-contrast: #0f172a;
+    --ion-color-medium-contrast-rgb: 15, 23, 42;
+    --ion-color-medium-shade: #828fa2;
+    --ion-color-medium-tint: #9facbf;
+
+    --ion-color-light: #1a2f4a;
+    --ion-color-light-rgb: 26, 47, 74;
+    --ion-color-light-contrast: #f1f5f9;
+    --ion-color-light-contrast-rgb: 241, 245, 249;
+    --ion-color-light-shade: #172941;
+    --ion-color-light-tint: #31445c;
+
+    --ion-color-step-50: #122033;
+    --ion-color-step-100: #16263c;
+    --ion-color-step-150: #1a2c45;
+    --ion-color-step-200: #1e324e;
+    --ion-color-step-250: #233857;
+    --ion-color-step-300: #273e60;
+    --ion-color-step-350: #2c4469;
+    --ion-color-step-400: #304a72;
+    --ion-color-step-450: #35507b;
+    --ion-color-step-500: #395684;
+    --ion-color-step-550: #4d6890;
+    --ion-color-step-600: #617a9c;
+    --ion-color-step-650: #758ca8;
+    --ion-color-step-700: #899eb4;
+    --ion-color-step-750: #9db0c0;
+    --ion-color-step-800: #b1c2cc;
+    --ion-color-step-850: #c5d4d8;
+    --ion-color-step-900: #d9e6e4;
+    --ion-color-step-950: #edf2f0;
 }
